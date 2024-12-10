@@ -1,21 +1,17 @@
 # Dockerfile for installing Firedrake plus UM2N and its dependencies with CPU support
 
 # Based on firedrake
-FROM firedrakeproject/firedrake-vanilla:latest
+FROM ghcr.io/mesh-adaptation/firedrake-parmmg:latest
 
 USER firedrake
 WORKDIR /home/firedrake
 
 RUN bash -c "source firedrake/bin/activate && \
+	  pip3 install torch --index-url https://download.pytorch.org/whl/cpu && \
 	  cd firedrake/src && \
-    pip3 install torch --index-url https://download.pytorch.org/whl/cpu && \
-	  git clone https://github.com/mesh-adaptation/movement.git && \
 	  git clone https://github.com/mesh-adaptation/UM2N.git && \
-	  cd movement && \
-	  make install && \
 	  python3 -m pip uninstall cffconvert -y && \
-	  cd ../UM2N && \
-	  python3 -m pip install -e ."
+	  python3 -m pip install -e UM2N"
 
 # NOTE: cffconvert is not currently used in UM2N and requires a conflicting
 # version of jsonschema with other dependencies.
