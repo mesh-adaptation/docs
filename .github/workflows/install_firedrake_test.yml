@@ -1,0 +1,86 @@
+name: 'Install Firedrake and Mesh Adaptation software'
+
+on:
+  # Trigger when this or any file in the install directory changes
+  pull_request:
+    paths:
+      - 'install/**'
+      - '.github/workflows/install_firedrake_test.yml'
+
+  # Trigger the workflow every Saturday at 1AM
+  schedule:
+    - cron: '0 1 * * 6'
+
+  # Manually trigger the workflow
+  workflow_dispatch:
+
+# Stop the workflow if a new run is requested
+concurrency:
+  group: 'install_firedrake_test-${{ github.ref }}'
+  cancel-in-progress: true
+
+jobs:
+  install_firedrake:
+    name: 'Install Firedrake'
+    runs-on: ubuntu-latest
+    container:
+      image: ubuntu:24.04
+      options: --user root
+
+    steps:
+      - name: 'Install required packages'
+        run: |
+          apt-get update
+          apt-get -y dist-upgrade
+          apt-get install -y --no-install-recommends tzdata curl vim docker.io \
+          openssh-client build-essential autoconf automake cmake gfortran git \
+          libopenblas-serial-dev libtool python3-dev python3-pip python3-tk \
+          python3-venv python3-requests zlib1g-dev libboost-dev sudo gmsh bison flex \
+          ninja-build libocct-ocaf-dev libocct-data-exchange-dev swig graphviz \
+          libcurl4-openssl-dev libxml2-dev
+
+      - name: 'Download necessary files'
+        run: |
+          curl -O https://raw.githubusercontent.com/mesh-adaptation/mesh-adaptation-docs/fix-mpi-install/install/Makefile
+          curl -O https://raw.githubusercontent.com/mesh-adaptation/mesh-adaptation-docs/fix-mpi-install/install/petsc_configure_options.txt
+
+      - name: 'Install Firedrake'
+        run: |
+          yes | make install_no_chk
+          cd firedrake-*
+          echo "FIREDRAKE_ENV=$(pwd)" >> $GITHUB_ENV
+
+      - name: 'Print firedrake-install.log if installation fails'
+        if: ${{ failure() }}
+        run: |
+          sleep 10
+          cat firedrake-install.log
+
+      - name: 'Install and test Animate'
+        run: |
+          . $FIREDRAKE_ENV/bin/activate
+          cd $FIREDRAKE_ENV/src
+          git clone https://github.com/mesh-adaptation/animate.git
+          cd animate
+          make install
+          make test
+
+      - name: 'Install and test Goalie'
+        if: ${{ !cancelled() }}
+        run: |
+          . $FIREDRAKE_ENV/bin/activate
+          cd $FIREDRAKE_ENV/src
+          git clone https://github.com/mesh-adaptation/goalie.git
+          cd goalie
+          make install
+          make test
+
+      - name: 'Install and test Movement'
+        if: ${{ !cancelled() }}
+        run: |
+          . $FIREDRAKE_ENV/bin/activate
+          cd $FIREDRAKE_ENV/src
+          git clone https://github.com/mesh-adaptation/movement.git
+          cd movement
+          make install
+          make test
