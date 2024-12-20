@@ -29,16 +29,28 @@ run_animate_demos:
 	cd . \
 
 run_goalie_demos:
+	@SKIP_DEMOS="time_partition.py gray_scott.py gray_scott_split.py"; \
 	for FILE in ${GOALIE}/demos/*.py; do \
-		cd  ${GOALIE}/demos/ && \
-		${PYTHON} $$FILE ; \
+		BASENAME=$$(basename $$FILE); \
+		if ! echo "$$SKIP_DEMOS" | grep -wq $$BASENAME; then \
+			cd ${GOALIE}/demos/ && \
+			${PYTHON} $$FILE; \
+		else \
+			echo "Skipping Goalie demo $$BASENAME"; \
+		fi; \
 	done; \
 	cd . \
 
 run_movement_demos:
+	@SKIP_DEMOS="monge_ampere_3d.py"; \
 	for FILE in ${MOVEMENT}/demos/*.py; do \
-		cd  ${MOVEMENT}/demos/ && \
-		${PYTHON} $$FILE ; \
+		BASENAME=$$(basename $$FILE); \
+		if ! echo "$$SKIP_DEMOS" | grep -wq $$BASENAME; then \
+			cd ${MOVEMENT}/demos/ && \
+			${PYTHON} $$FILE; \
+		else \
+			echo "Skipping Movement demo $$BASENAME"; \
+		fi; \
 	done; \
 	cd . \
 
