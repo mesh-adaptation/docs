@@ -22,18 +22,18 @@ help:
 GENERATED_FILES = source/demos
 
 run_animate_demos:
+	cd ${ANIMATE}/demos/ \
 	for FILE in ${ANIMATE}/demos/*.py; do \
-		cd  ${ANIMATE}/demos/ && \
 		${PYTHON} $$FILE ; \
 	done; \
 	cd . \
 
 run_goalie_demos:
-	@SKIP_DEMOS="time_partition.py gray_scott.py gray_scott_split.py"; \
+	SKIP_DEMOS="time_partition.py gray_scott.py gray_scott_split.py"; \
+	cd ${GOALIE}/demos/ \
 	for FILE in ${GOALIE}/demos/*.py; do \
 		BASENAME=$$(basename $$FILE); \
 		if ! echo "$$SKIP_DEMOS" | grep -wq $$BASENAME; then \
-			cd ${GOALIE}/demos/ && \
 			${PYTHON} $$FILE; \
 		else \
 			echo "Skipping Goalie demo $$BASENAME"; \
@@ -42,11 +42,11 @@ run_goalie_demos:
 	cd . \
 
 run_movement_demos:
-	@SKIP_DEMOS="monge_ampere_3d.py"; \
+	SKIP_DEMOS="monge_ampere_3d.py"; \
+	cd ${MOVEMENT}/demos/ \
 	for FILE in ${MOVEMENT}/demos/*.py; do \
 		BASENAME=$$(basename $$FILE); \
 		if ! echo "$$SKIP_DEMOS" | grep -wq $$BASENAME; then \
-			cd ${MOVEMENT}/demos/ && \
 			${PYTHON} $$FILE; \
 		else \
 			echo "Skipping Movement demo $$BASENAME"; \
