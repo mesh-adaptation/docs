@@ -22,23 +22,33 @@ help:
 GENERATED_FILES = source/demos
 
 run_animate_demos:
-	for FILE in ${ANIMATE}/demos/*.py; do \
-		cd  ${ANIMATE}/demos/ && \
-		${PYTHON} $$FILE ; \
+	cd ${ANIMATE}/demos/ && \
+	for FILE in *.py; do \
+		${PYTHON} $$FILE; \
 	done; \
 	cd . \
 
 run_goalie_demos:
-	for FILE in ${GOALIE}/demos/*.py; do \
-		cd  ${GOALIE}/demos/ && \
-		${PYTHON} $$FILE ; \
+	SKIP_DEMOS="time_partition.py gray_scott.py gray_scott_split.py"; \
+	cd ${GOALIE}/demos/ && \
+	for FILE in *.py; do \
+		if ! echo "$$SKIP_DEMOS" | grep -wq $$FILE; then \
+			${PYTHON} $$FILE; \
+		else \
+			echo "Skipping Goalie demo $$FILE"; \
+		fi; \
 	done; \
 	cd . \
 
 run_movement_demos:
-	for FILE in ${MOVEMENT}/demos/*.py; do \
-		cd  ${MOVEMENT}/demos/ && \
-		${PYTHON} $$FILE ; \
+	SKIP_DEMOS="monge_ampere_3d.py"; \
+	cd ${MOVEMENT}/demos/ && \
+	for FILE in *.py; do \
+		if ! echo "$$SKIP_DEMOS" | grep -wq $$FILE; then \
+			${PYTHON} $$FILE; \
+		else \
+			echo "Skipping Movement demo $$FILE"; \
+		fi; \
 	done; \
 	cd . \
 
