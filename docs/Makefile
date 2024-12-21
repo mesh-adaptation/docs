@@ -22,34 +22,32 @@ help:
 GENERATED_FILES = source/demos
 
 run_animate_demos:
-	cd ${ANIMATE}/demos/ \
-	for FILE in ${ANIMATE}/demos/*.py; do \
-		${PYTHON} $$FILE ; \
+	cd ${ANIMATE}/demos/ && \
+	for FILE in *.py; do \
+		${PYTHON} $$FILE; \
 	done; \
 	cd . \
 
 run_goalie_demos:
 	SKIP_DEMOS="time_partition.py gray_scott.py gray_scott_split.py"; \
-	cd ${GOALIE}/demos/ \
-	for FILE in ${GOALIE}/demos/*.py; do \
-		BASENAME=$$(basename $$FILE); \
-		if ! echo "$$SKIP_DEMOS" | grep -wq $$BASENAME; then \
+	cd ${GOALIE}/demos/ && \
+	for FILE in *.py; do \
+		if ! echo "$$SKIP_DEMOS" | grep -wq $$FILE; then \
 			${PYTHON} $$FILE; \
 		else \
-			echo "Skipping Goalie demo $$BASENAME"; \
+			echo "Skipping Goalie demo $$FILE"; \
 		fi; \
 	done; \
 	cd . \
 
 run_movement_demos:
 	SKIP_DEMOS="monge_ampere_3d.py"; \
-	cd ${MOVEMENT}/demos/ \
-	for FILE in ${MOVEMENT}/demos/*.py; do \
-		BASENAME=$$(basename $$FILE); \
-		if ! echo "$$SKIP_DEMOS" | grep -wq $$BASENAME; then \
+	cd ${MOVEMENT}/demos/ && \
+	for FILE in *.py; do \
+		if ! echo "$$SKIP_DEMOS" | grep -wq $$FILE; then \
 			${PYTHON} $$FILE; \
 		else \
-			echo "Skipping Movement demo $$BASENAME"; \
+			echo "Skipping Movement demo $$FILE"; \
 		fi; \
 	done; \
 	cd . \
