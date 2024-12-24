@@ -144,6 +144,7 @@ RUN curl -O https://raw.githubusercontent.com/firedrakeproject/firedrake/master/
 		--no-package-manager \
 		--disable-ssh \
 		--honour-petsc-dir \
+		--mpihome=${MPICH_DIR} \
 		--mpicc=${MPICH_DIR}/mpicc \
 		--mpicxx=${MPICH_DIR}/mpicxx \
 		--mpif90=${MPICH_DIR}/mpif90 \
