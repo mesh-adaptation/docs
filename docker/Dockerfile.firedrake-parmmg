@@ -155,6 +155,6 @@ RUN curl -O https://raw.githubusercontent.com/firedrakeproject/firedrake/master/
     git clone https://github.com/mesh-adaptation/animate.git && \
     git clone https://github.com/mesh-adaptation/movement.git && \
     git clone https://github.com/mesh-adaptation/goalie.git && \
-    cd animate && make install && \
-    cd ../movement && make install && \
-    cd ../goalie && make install"
+    cd animate && make install_dev && \
+    cd ../movement && make install_dev && \
+    cd ../goalie && make install_dev"
