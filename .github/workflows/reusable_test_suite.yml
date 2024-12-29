@@ -29,15 +29,19 @@ jobs:
     steps:
       - name: 'Check out the repo'
         id: checkout
-        uses: actions/checkout@v4
-
-      - name: 'Setup tmate session'
-        uses: mxschmitt/action-tmate@v3        
+        uses: actions/checkout@v4     
 
       - name: 'Install package'
         run: |
           . /home/firedrake/firedrake/bin/activate
           make install_dev
+
+      - name: 'Upload artifact if install failed'
+        if: ${{ failure() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: pre-commit-log
+          path: /github/home/.cache/pre-commit/pre-commit.log
 
       - name: 'Lint'
         run: |
