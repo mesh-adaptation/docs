@@ -27,7 +27,7 @@ be searched using the inbuilt :ref:`search engine <search>`.
 .. toctree::
     :maxdepth: 1
 
-    Introduction to mesh movement driven by a Monge-Ampère type equation <../demos/monge_ampere1.py>
+    Introduction to mesh movement driven by a Monge-Ampère type equation <../demos/monge_ampere_ring.py>
     Monge-Ampère mesh movement in three dimensions <../demos/monge_ampere_3d.py>
     Using mesh movement to optimize the mesh for PDE solution <../demos/monge_ampere_helmholtz.py>
 
