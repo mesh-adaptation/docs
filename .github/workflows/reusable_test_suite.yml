@@ -31,6 +31,9 @@ jobs:
         id: checkout
         uses: actions/checkout@v4
 
+      - name: 'Setup tmate session'
+        uses: mxschmitt/action-tmate@v3        
+
       - name: 'Install package'
         run: |
           . /home/firedrake/firedrake/bin/activate
