@@ -31,6 +31,9 @@ jobs:
         id: checkout
         uses: actions/checkout@v4
 
+      - name: 'Install package'
+        run: make install_dev
+
       - name: 'Lint'
         run: |
           . /home/firedrake/firedrake/bin/activate
