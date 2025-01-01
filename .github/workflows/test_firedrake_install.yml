@@ -65,7 +65,7 @@ jobs:
           cd $FIREDRAKE_ENV/src
           git clone https://github.com/mesh-adaptation/animate.git
           cd animate
-          make install
+          make install_dev
           make test
 
       - name: 'Install and test Goalie'
@@ -75,7 +75,7 @@ jobs:
           cd $FIREDRAKE_ENV/src
           git clone https://github.com/mesh-adaptation/goalie.git
           cd goalie
-          make install
+          make install_dev
           make test
 
       - name: 'Install and test Movement'
@@ -85,5 +85,5 @@ jobs:
           cd $FIREDRAKE_ENV/src
           git clone https://github.com/mesh-adaptation/movement.git
           cd movement
-          make install
+          make install_dev
           make test
