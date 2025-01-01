@@ -29,7 +29,13 @@ jobs:
     steps:
       - name: 'Check out the repo'
         id: checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v4     
+
+      - name: 'Install package'
+        run: |
+          . /home/firedrake/firedrake/bin/activate
+          git config --global --add safe.directory '*'
+          make install_dev
 
       - name: 'Lint'
         run: |
