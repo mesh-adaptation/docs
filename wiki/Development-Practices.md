@@ -176,14 +176,12 @@ In some cases, there will still be formatting issues that you will need to fix m
 
 ## Docker build
 
-The [Mesh Adaptation Docs repository](https://github.com/mesh-adaptation/mesh-adaptation-docs) contains the configuration files for the bespoke Firedrake Docker image mentioned on the [installation instructions page](./Installation-instructions).
-This Docker image is based off the ["Firedrake vanilla"](https://github.com/firedrakeproject/firedrake/blob/master/docker/Dockerfile.vanilla) one.
-It starts from that Docker image and makes some modifications:
-* Switch to the [`jwallwork23/firedrake-parmmg`](https://github.com/firedrakeproject/petsc/tree/jwallwork23/firedrake-parmmg) PETSc branch;
+The [Mesh Adaptation Docs repository](https://github.com/mesh-adaptation/docs) contains the configuration files for the bespoke Firedrake Docker image mentioned on the [installation instructions page](./Installation-instructions).
+This Docker image closely follows the ["Firedrake vanilla"](https://github.com/firedrakeproject/firedrake/blob/master/docker/Dockerfile.vanilla) one, but makes some modifications:
 * Reconfigure PETSc, installing Mmg, ParMmg, and their dependencies;
 * Rebuild PETSc and its other dependencies;
 * Rebuild Firedrake and its other dependencies;
 * Install Animate, Goalie, Movement, and their other dependencies.
 
 The Docker image is automatically updated every Saturday night using GitHub Actions.
-If this update is successful then the result is pushed to DockerHub and used for subsequent CI jobs.
+If this update is successful then the result is pushed to the Github Container Registry and used for subsequent CI jobs.
