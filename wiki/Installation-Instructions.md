@@ -1,4 +1,4 @@
-The following installation instructions assume a Linux or WSL operating system.
+The following installation instructions assume a Linux or Windows Subsystem for Linux (WSL) operating system.
 The mesh adaptation modules are dependent on a custom setup for Firedrake with PETSc from either a [Makefile](#default-approach) or a [Docker image](#installing-firedrake-via-docker-image).
 Once Firedrake is installed (or if you already have a working installation), see the section on [installing Animate, Goalie, or Movement](#installing-animate-goalie-or-movement).
 

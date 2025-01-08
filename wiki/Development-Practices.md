@@ -40,11 +40,13 @@ The project board categories are:
 * **Done** - Issues that have been addressed or are no longer valid.
 
 Notice that all the categories refer to [Issues](#issues).
-[Pull Requests](#pull-requests) should not be put on the project board.
+[Pull Requests](#pull-requests) should not be put on the project board, except if they do not have a linked issue. (See  [below](#issues) for special cases in which this might occur.)
 
-### Other project boards
+### Other project board views
 
-During the course of developing the mesh adaptation codes, it may be useful to set up new project boards, e.g., for sprints or hackathons.
+By default, you will see the "Overview" view of the project board. This is a somewhat overwhelming representation of all the issues associated with the development of Mesh Adaptation packages. Browse the other "views" of the project board by clicking on the different tabs for more focused representations of issues related to particular pieces of work or specific packages.
+
+The current recommendation is to create new views for new pieces of work, rather than creating new project boards. This helps to keep everything in the same place. Views can be set up in many ways but a common approach is to filter for a particular label, e.g., `docsprint`.
 
 ## Issues
 
@@ -52,9 +54,9 @@ During the course of developing the mesh adaptation codes, it may be useful to s
   * New Issue links: <a href="https://github.com/mesh-adaptation/animate/issues/new/choose" target="_blank" rel="noopener noreferrer">Animate</a>, <a href="https://github.com/mesh-adaptation/goalie/issues/new/choose" target="_blank" rel="noopener noreferrer">Goalie</a>, <a href="https://github.com/mesh-adaptation/movement/issues/new/choose" target="_blank" rel="noopener noreferrer">Movement</a>.
 * Add labels to your Issue using the right-hand panel, for example identifying whether it relates to a "bug" or an "enhancement". If you think the Issue is of high priority then use the "PRIORITY" label, too.
 * Add your new Issue to the [Mesh Adaptation development project board](https://github.com/orgs/mesh-adaptation/projects/2/views/1) and set its status to "Backlog" once the Issue is created. If you used the "PRIORITY" label above then use that status here, too.
-* Set the milestone of the Issue to an appropriate upcoming milestone from the drop-down menu.
+* Set the milestone of the Issue to an appropriate upcoming milestone from the drop-down menu (if there is one).
 * If you are happy to take on a particular Issue, add yourself to the list of assignees using the right-hand panel.
-* Every Pull Request should have an associated Issue. (Think of Issues like a ticketing system.)
+* In general, every Pull Request should have an associated Issue. (Think of Issues like a ticketing system.) An exception is for trivial changes, such as typo fixes. In these cases, feel free to open a PR without a linked issue and add it to the project board.
 
 ## Pull Requests
 
@@ -98,7 +100,7 @@ The recommended workflow for the **reviewer(s)** to follow is as follows:
 ## Testing
 
 All Mesh Adaptation codes have a subdirectory called `test` containing dedicated test suites with a mixture of [unit tests](#unit-tests) and [integration tests](#integration-tests).
-Goalie also has an additional `test_adjoint` subdirectory, specifically for tests of functionality making use of adjoint methods where annotation is turned on.
+Goalie also has an additional `test/adjoint` subdirectory, specifically for tests of functionality making use of adjoint methods where annotation is turned on.
 All tests which do not make use of the adjoint, i.e., annotation is not turned on, should be located under the standard `test` subdirectory.
 
 ### Unit tests

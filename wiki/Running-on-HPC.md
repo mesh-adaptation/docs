@@ -1,5 +1,5 @@
-1. Build the image in a sandbox from the Dockerhub
-`singularity build --sandbox ./firedrake-parmmg docker://jwallwork/firedrake-parmmg`
+1. Build the image in a sandbox from GitHub Container Registry
+`singularity build --sandbox ./firedrake-parmmg docker://ghcr.io/mesh-adaptation/firedrake-parmmg:latest`
 
 2. Convert the sandboxed image to a Singularity container
 `singularity build firedrake-parmmg.sif ./firedrake-parmmg`
