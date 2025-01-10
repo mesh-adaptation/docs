@@ -52,11 +52,8 @@ The current recommendation is to create new views for new pieces of work, rather
 
 * If you identify a bug, missing feature, or other issue with one of the codes then raise an Issue for it:
   * New Issue links: <a href="https://github.com/mesh-adaptation/animate/issues/new/choose" target="_blank" rel="noopener noreferrer">Animate</a>, <a href="https://github.com/mesh-adaptation/goalie/issues/new/choose" target="_blank" rel="noopener noreferrer">Goalie</a>, <a href="https://github.com/mesh-adaptation/movement/issues/new/choose" target="_blank" rel="noopener noreferrer">Movement</a>.
-* Add labels to your Issue using the right-hand panel, for example identifying whether it relates to a "bug" or an "enhancement". If you think the Issue is of high priority then use the "PRIORITY" label, too.
-* Add your new Issue to the [Mesh Adaptation development project board](https://github.com/orgs/mesh-adaptation/projects/2/views/1) and set its status to "Backlog" once the Issue is created. If you used the "PRIORITY" label above then use that status here, too.
-* Set the milestone of the Issue to an appropriate upcoming milestone from the drop-down menu (if there is one).
-* If you are happy to take on a particular Issue, add yourself to the list of assignees using the right-hand panel.
-* In general, every Pull Request should have an associated Issue. (Think of Issues like a ticketing system.) An exception is for trivial changes, such as typo fixes. In these cases, feel free to open a PR without a linked issue and add it to the project board.
+* If you are happy to take on a particular Issue, please say so in the issue and a maintainer will assign it to you.
+* In general, every Pull Request should have an associated Issue. (Think of Issues like a ticketing system.) An exception is for trivial changes, such as typo fixes. In these cases, feel free to open a PR without a linked issue.
 
 ## Pull Requests
 
@@ -72,11 +69,9 @@ Note that if you are not a member of the `mesh-adaptation` organisation then you
 8. *GitHub:* The first time you push the branch, a URL hint will appear for you to open a corresponding Pull Request (PR). Use that link (or the New Pull Request button) to open a PR.
   * New PR links: <a href="https://github.com/mesh-adaptation/animate/compare" target="_blank" rel="noopener noreferrer">Animate</a>, <a href="https://github.com/mesh-adaptation/goalie/compare" target="_blank" rel="noopener noreferrer">Goalie</a>, <a href="https://github.com/mesh-adaptation/movement/compare" target="_blank" rel="noopener noreferrer">Movement</a>.
 9. *GitHub:* Start the PR text box with "Closes #XX.", where `XX` is the Issue number. If your PR addresses multiple issues then replicate this for each of them.<sup>2</sup> These statements create links within GitHub such that merging the PR will close the corresponding Issues. Fill the rest of the text box with details of what the PR sets out to do and how it achieves this.
-10. *GitHub:* In the right-hand panel, add yourself to the list of assignees and replicate any labels from the Issue. Do not set a Project - they are for Issues only.
-11. *GitHub:* Once you have pushed any changes required to make the [Test Suite](#test-suite) pass, assign one or more reviewer(s) (if in doubt of who to assign, put [jwallwork23](https://github.com/jwallwork23)).
-12. *GitHub:* See [below](#review-process) for details on the review process. If the reviewer(s) request changes, you will need to make edits to your branch and/or add comments to the PR to justify your approach. This will likely be an iterative back-and-forth process.
-13. *GitHub*: Once the reviewer(s) are happy with the changes, they will approve the changes and leave you to click the green "Merge pull request" button. You will not be able to click this button until the PR has received at least one approval. It is good practice to delete your branch using the purple button once you have done this.
-14. *Command line*: Remember to delete your local copy of the branch, too. This can be achieved with (for example) `git branch -D 3_blind_mice`.
+10. *GitHub:* Once you have pushed any changes required to make the [Test Suite](#test-suite) pass, mark the PR as ready for review.
+11. *GitHub:* See [below](#review-process) for details on the review process. If the reviewer(s) request changes, you will need to make edits to your branch and/or add comments to the PR to justify your approach. This will likely be an iterative back-and-forth process.
+12. *Command line*: Remember to delete your local copy of the branch, too. This can be achieved with (for example) `git branch -D 3_blind_mice`.
 
 Notes:
 
