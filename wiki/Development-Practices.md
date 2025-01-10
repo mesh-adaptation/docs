@@ -40,7 +40,7 @@ The project board categories are:
 * **Done** - Issues that have been addressed or are no longer valid.
 
 Notice that all the categories refer to [Issues](#issues).
-[Pull Requests](#pull-requests) should not be put on the project board, except if they do not have a linked issue. (See  [below](#issues) for special cases in which this might occur.)
+[Pull Requests](#pull-requests) should not be put on the project board, except if they do not have a linked issue. (See [below](#issues) for special cases in which this might occur.)
 
 ### Other project board views
 
@@ -62,22 +62,19 @@ Note that if you are not a member of the `mesh-adaptation` organisation then you
 1. *Command line:* Check out the `main` branch (or whichever other branch you wish to start work from the head of).
 2. *Command line:* Run `git pull` to make sure you have the latest changes.
 3. *Command line:* Create a new branch with `git checkout -b XX_<branch_name>`, where `XX` is the Issue number and the branch name uses [snake_case](https://en.wikipedia.org/wiki/Snake_case), e.g., `3_blind_mice`.
-4. *Command line:* When you commit a change, it can be beneficial to include a link the the issue in the commit message. Do this with `#XX`, where again `XX` is the Issue number<sup>1</sup>. This will provide updates to the Issue on progress that has been made (in the next step). Note: formatting checks may cause your commits to fail on the first attempt - see [below](#formatting) for details.
-5. *Command line:* If you are adding new functionality then please add new tests to check things are working properly. (See the [Testing](#testing) section for more details.)
-6. *Command line:* If you haven't contributed to the package before, add yourself to the contributors list by editing the `authors` dictionary in the `pyproject.toml` file.
-7. *Command line:* Once you are happy with your changes, push them to GitHub with `git push`. If this is the first time you have pushed your branch, you will need to set the remote, too, e.g., `git push -u origin 3_blind_mice`.
-8. *GitHub:* The first time you push the branch, a URL hint will appear for you to open a corresponding Pull Request (PR). Use that link (or the New Pull Request button) to open a PR.
+4. *Command line:* If you are adding new functionality then please add new tests to check things are working properly. (See the [Testing](#testing) section for more details.)
+5. *Command line:* If you haven't contributed to the package before, add yourself to the contributors list by editing the `authors` dictionary in the `pyproject.toml` file.
+6. *Command line:* Once you are happy with your changes, push them to GitHub with `git push`. If this is the first time you have pushed your branch, you will need to set the remote, too, e.g., `git push -u origin 3_blind_mice`.
+7. *GitHub:* The first time you push the branch, a URL hint will appear for you to open a corresponding Pull Request (PR). Use that link (or the New Pull Request button) to open a PR.
   * New PR links: <a href="https://github.com/mesh-adaptation/animate/compare" target="_blank" rel="noopener noreferrer">Animate</a>, <a href="https://github.com/mesh-adaptation/goalie/compare" target="_blank" rel="noopener noreferrer">Goalie</a>, <a href="https://github.com/mesh-adaptation/movement/compare" target="_blank" rel="noopener noreferrer">Movement</a>.
-9. *GitHub:* Start the PR text box with "Closes #XX.", where `XX` is the Issue number. If your PR addresses multiple issues then replicate this for each of them.<sup>2</sup> These statements create links within GitHub such that merging the PR will close the corresponding Issues. Fill the rest of the text box with details of what the PR sets out to do and how it achieves this.
-10. *GitHub:* Once you have pushed any changes required to make the [Test Suite](#test-suite) pass, mark the PR as ready for review.
-11. *GitHub:* See [below](#review-process) for details on the review process. If the reviewer(s) request changes, you will need to make edits to your branch and/or add comments to the PR to justify your approach. This will likely be an iterative back-and-forth process.
-12. *Command line*: Remember to delete your local copy of the branch, too. This can be achieved with (for example) `git branch -D 3_blind_mice`.
+8. *GitHub:* Start the PR text box with "Closes #XX.", where `XX` is the Issue number. If your PR addresses multiple issues then replicate this for each of them.<sup>1</sup> These statements create links within GitHub such that merging the PR will close the corresponding Issues. Fill the rest of the text box with details of what the PR sets out to do and how it achieves this.
+9. *GitHub:* Once you have pushed any changes required to make the [Test Suite](#test-suite) pass, mark the PR as ready for review.
+10. *GitHub:* See [below](#review-process) for details on the review process. If the reviewer(s) request changes, you will need to make edits to your branch and/or add comments to the PR to justify your approach. This will likely be an iterative back-and-forth process.
+11. *Command line*: Remember to delete your local copy of the branch, too. This can be achieved with (for example) `git branch -D 3_blind_mice`.
 
 Notes:
 
-<sup>1</sup> If you wish to start a commit message with a `#` you will need to change the comment character used by Git. To do this (setting the character to `&`, say):`git config core.commentChar "&"`.
-
-<sup>2</sup> Sometimes "Partially addresses #XX." might be more appropriate.
+<sup>1</sup> Sometimes "Partially addresses #XX." might be more appropriate.
 
 ## Review Process
 
