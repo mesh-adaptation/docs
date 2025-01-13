@@ -41,6 +41,9 @@ extensions = [
     "sphinx.ext.autosectionlabel",
 ]
 
+# Order documented members as they are in the module's source.
+autodoc_member_order = 'bysource'
+
 autodoc_mock_imports = ["torch", "torch_geometric", "pytorch3d"]
 
 # Make sure the target is unique
