@@ -41,8 +41,11 @@ extensions = [
     "sphinx.ext.autosectionlabel",
 ]
 
-# Order documented members as they are in the module's source.
-autodoc_member_order = 'bysource'
+autodoc_default_options = {
+    "ignore-module-all": True,  # Document all members, even those not listed in __all__
+    "member-order": "bysource", # Order members as they are in the module's source
+    "class-doc-from": "both",   # Include both the class and __init__ docstrings
+}
 
 autodoc_mock_imports = ["torch", "torch_geometric", "pytorch3d"]
 
@@ -209,8 +212,6 @@ intersphinx_mapping = {
     "firedrake": ("https://firedrakeproject.org/", None),
     "python": ("https://docs.python.org/3/", None),
 }
-
-autoclass_content = "both"
 
 #  -- Options for sphinxcontrib.bibtex ------------------------------------
 bibtex_bibfiles = [
