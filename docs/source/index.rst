@@ -52,8 +52,19 @@ respective manuals.
 The source codes for all four packages are hosted on GitHub:
 `Animate <https://github.com/mesh-adaptation/animate/>`__,
 `Movement <https://github.com/mesh-adaptation/movement/>`__,
-`Goalie <https://github.com/mesh-adaptation/goalie/>`__.
+`Goalie <https://github.com/mesh-adaptation/goalie/>`__,
 `UM2N <https://github.com/mesh-adaptation/UM2N/>`__.
+
+.. rubric:: Support and discussion
+
+To ask for help or join discussions related to development, feel free to open issues or
+start discussions on the relevant GitHub repository, or join the relevant Slack channel:
+`Animate <https://firedrakeproject.slack.com/archives/C07KTDB3JNB/>`__,
+`Movement <https://firedrakeproject.slack.com/archives/C07L7S3547M/>`__,
+`Goalie <https://firedrakeproject.slack.com/archives/C07L813FG74/>`__.
+The channels are part of the
+`Firedrake Slack workspace <https://firedrakeproject.slack.com/>`__,
+which is free to join.
 
 .. toctree::
    :hidden:
