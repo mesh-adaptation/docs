@@ -32,21 +32,16 @@ jobs:
         uses: actions/checkout@v4     
 
       - name: 'Install package'
-        run: |
-          . /home/firedrake/firedrake/bin/activate
-          git config --global --add safe.directory '*'
-          make install_dev
+        run: pip install --break-system-packages -e .[dev]
 
       - name: 'Lint'
-        run: |
-          . /home/firedrake/firedrake/bin/activate
-          make lint
+        run: make lint
 
       - name: 'Run tests'
         run: |
-          . /home/firedrake/firedrake/bin/activate
           ${{ inputs.test-command }}
-          python $(which firedrake-clean)
-          python -m coverage erase
-          python -m coverage run --source=${{ github.event.repository.name }} -m pytest -v --durations=20 test
-          python -m coverage report -m
+          python3 $(which firedrake-clean)
+          python3 -m coverage erase
+          python3 -m coverage run --source=${{ github.event.repository.name }} -m pytest -v --durations=20 -k "not test_parallel.py" test
+          mpiexec -n 2 python3 -m coverage run --source=${{ github.event.repository.name }} -m pytest -v --durations=20 -m parallel[2] test
+          python3 -m coverage report -m
