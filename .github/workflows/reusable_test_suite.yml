@@ -25,6 +25,10 @@ jobs:
     container:
       image: ghcr.io/mesh-adaptation/${{ inputs.docker-image }}:pip
       options: --user root
+    # Allow executing mpiexec as root
+    env:
+      OMPI_ALLOW_RUN_AS_ROOT: '1'
+      OMPI_ALLOW_RUN_AS_ROOT_CONFIRM: '1'
 
     steps:
       - name: 'Check out the repo'
