@@ -27,33 +27,27 @@ jobs:
       options: --user root
 
     steps:
-      - name: Set environment variables
-        run: |
-          echo "PETSC_DIR=/home/firedrake/petsc" >> $GITHUB_ENV
-          echo "PETSC_ARCH=arch-firedrake-default" >> $GITHUB_ENV
-          echo "PATH=/home/firedrake/petsc/arch-firedrake-default/bin:/home/firedrake/.local/bin:$PATH" >> $GITHUB_ENV
-          echo "HDF5_MPI=ON" >> $GITHUB_ENV
-          echo "CC=mpicc" >> $GITHUB_ENV
-          echo "CXX=mpicxx" >> $GITHUB_ENV
-          echo "CFLAGS=-mtune=generic" >> $GITHUB_ENV
-          echo "CPPFLAGS=-mtune=generic" >> $GITHUB_ENV
-          echo "MPICC=mpicc" >> $GITHUB_ENV
-
       - name: 'Check out the repo'
         id: checkout
         uses: actions/checkout@v4     
 
       - name: 'Install package'
-        run: pip install --break-system-packages -e .[dev]
+        run: |
+          . /home/firedrake/firedrake-venv/bin/activate
+          pip install --break-system-packages -e .[dev]
 
       - name: 'Lint'
-        run: make lint
+        run: |
+          . /home/firedrake/firedrake-venv/bin/activate
+          make lint
 
       - name: 'Run tests'
         run: |
+          . /home/firedrake/firedrake-venv/bin/activate
           ${{ inputs.test-command }}
           python3 $(which firedrake-clean)
           python3 -m coverage erase
-          python3 -m coverage run --source=${{ github.event.repository.name }} -m pytest -v --durations=20 -k "not test_parallel.py" test
-          mpiexec -n 2 python3 -m coverage run --source=${{ github.event.repository.name }} -m pytest -v --durations=20 -m parallel[2] test
+          python3 -m coverage run --source=${{ github.event.repository.name }} -m pytest -v --durations=20 -k "not parallel" test
+          mpiexec -n 2 python3 -m coverage run --parallel-mode --source=${{ github.event.repository.name }} -m pytest -v --durations=20 -m parallel[2] test
+          mpiexec -n 3 python3 -m coverage run --parallel-mode --source=${{ github.event.repository.name }} -m pytest -v --durations=20 -m parallel[3] test
           python3 -m coverage report -m
