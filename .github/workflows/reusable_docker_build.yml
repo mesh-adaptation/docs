@@ -35,7 +35,7 @@ jobs:
       - name: 'Build and Push Docker Container'
         uses: docker/build-push-action@v5
         with:
-          push: ${{ github.ref == 'refs/heads/main' }}
+          push: true
           no-cache: true
           file: ${{ inputs.dockerfile-path }}
-          tags: ${{ inputs.docker-image-tag }}
+          tags: 'ghcr.io/mesh-adaptation/firedrake-parmmg:pip'
