@@ -27,6 +27,18 @@ jobs:
       options: --user root
 
     steps:
+      - name: Set environment variables
+        run: |
+          echo "PETSC_DIR=/home/firedrake/petsc" >> $GITHUB_ENV
+          echo "PETSC_ARCH=arch-firedrake-default" >> $GITHUB_ENV
+          echo "PATH=/home/firedrake/petsc/arch-firedrake-default/bin:/home/firedrake/.local/bin:$PATH" >> $GITHUB_ENV
+          echo "HDF5_MPI=ON" >> $GITHUB_ENV
+          echo "CC=mpicc" >> $GITHUB_ENV
+          echo "CXX=mpicxx" >> $GITHUB_ENV
+          echo "CFLAGS=-mtune=generic" >> $GITHUB_ENV
+          echo "CPPFLAGS=-mtune=generic" >> $GITHUB_ENV
+          echo "MPICC=mpicc" >> $GITHUB_ENV
+
       - name: 'Check out the repo'
         id: checkout
         uses: actions/checkout@v4     
