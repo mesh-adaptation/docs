@@ -1,115 +1,23 @@
 # Dockerfile for installing Firedrake with mesh adaptation support via Mmg and ParMmg,
 # as well as Animate, Goalie, and Movement
+# https://github.com/firedrakeproject/firedrake/blob/master/docker/Dockerfile.vanilla
 
-# First stage: Build MPICH and PETSc. Based off
-# https://github.com/firedrakeproject/firedrake/blob/master/docker/Dockerfile.env
-FROM ubuntu:24.04 AS petscbuild
+FROM ubuntu:latest
 
-USER root
-WORKDIR /home/firedrake
+# Set '-o pipefail' to avoid linter error (https://github.com/hadolint/hadolint/wiki/DL4006)
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+
+# Use a more sane locale
+ENV LC_ALL=C.UTF-8
+
+# Avoid tzdata prompt
+# (https://stackoverflow.com/questions/61388002/how-to-avoid-question-during-the-docker-build)
+ENV DEBIAN_FRONTEND=noninteractive
+ENV TZ=Europe/London
+
+# Install 'parallel' because it is needed by 'firedrake-run-split-tests'
 RUN apt-get update \
-    && apt-get -y dist-upgrade \
-    && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends tzdata \
-        curl vim docker.io openssh-client build-essential autoconf automake \
-        cmake gfortran git libopenblas-serial-dev libtool python3-dev python3-pip python3-tk \
-        python3-venv python3-requests zlib1g-dev libboost-dev sudo gmsh bison flex ninja-build \
-        libocct-ocaf-dev libocct-data-exchange-dev swig graphviz libcurl4-openssl-dev libxml2-dev \
-    && rm -rf /var/lib/apt/lists/*
-
-# Fetch PETSc
-RUN git clone --depth 1 https://github.com/firedrakeproject/petsc.git
-
-# Build MPICH manually because we don't want PETSc to build it twice
-RUN bash -c 'export PACKAGES=/home/firedrake/petsc/packages; \
-    cd petsc; \
-    ./configure \
-        --COPTFLAGS=-O3 -march=native -mtune=native \
-        --CXXOPTFLAGS=-O3 -march=native -mtune=native \
-        --FOPTFLAGS=-O3 -march=native -mtune=native \
-        --with-c2html=0 \
-        --with-debugging=0 \
-        --with-fortran-bindings=0 \
-        --with-make-np=12 \
-        --with-shared-libraries=1 \
-        --with-zlib \
-        --download-eigen \
-        --download-fftw \
-        --download-hdf5 \
-        --download-hwloc \
-        --download-hypre \
-        --download-metis \
-        --download-mmg \
-        --download-mumps \
-        --download-mpich \
-        --download-mpich-device=ch3:sock \
-        --download-netcdf \
-        --download-parmmg \
-        --download-pastix \
-        --download-pnetcdf \
-        --download-ptscotch \
-        --download-scalapack \
-        --download-suitesparse \
-        --download-superlu_dist \
-        PETSC_ARCH=packages; \
-        mv ${PACKAGES}/include/petscconf.h ${PACKAGES}/include/old_petscconf.nope;' && \
-    rm -rf /home/firedrake/petsc/**/externalpackages && \
-    rm -rf /home/firedrake/petsc/src/docs && \
-    rm -f /home/firedrake/petsc/src/**/tutorials/output/* && \
-    rm -f /home/firedrake/petsc/src/**/tests/output/*
-# Don't run make here, we only want MPICH and HWLOC
-# It is also necessary to move `petscconf.h` so packages isn't treated like a working PETSc
-
-# Build PETSc
-RUN bash -c 'export PACKAGES=/home/firedrake/petsc/packages; \
-    cd petsc; \
-    ./configure \
-        --COPTFLAGS=-O3 -march=native -mtune=native \
-        --CXXOPTFLAGS=-O3 -march=native -mtune=native \
-        --FOPTFLAGS=-O3 -march=native -mtune=native \
-        --with-c2html=0 \
-        --with-debugging=0 \
-        --with-fortran-bindings=0 \
-        --with-make-np=12 \
-        --with-shared-libraries=1 \
-        --with-bison \
-        --with-flex \
-        --with-zlib \
-        --with-eigen-dir=${PACKAGES} \
-        --with-fftw-dir=${PACKAGES} \
-        --with-hdf5-dir=${PACKAGES} \
-        --with-hwloc-dir=${PACKAGES} \
-        --with-hypre-dir=${PACKAGES} \
-        --with-metis-dir=${PACKAGES} \
-        --with-mmg-dir=${PACKAGES} \
-        --with-mpi-dir=${PACKAGES} \
-        --with-mumps-dir=${PACKAGES} \
-        --with-netcdf-dir=${PACKAGES} \
-        --with-parmmg-dir=${PACKAGES} \
-        --with-pastix-dir=${PACKAGES} \
-        --with-pnetcdf-dir=${PACKAGES} \
-        --with-ptscotch-dir=${PACKAGES} \
-        --with-scalapack-dir=${PACKAGES} \
-        --with-suitesparse-dir=${PACKAGES} \
-        --with-superlu_dist-dir=${PACKAGES} \
-        PETSC_ARCH=default; \
-    make PETSC_DIR=/home/firedrake/petsc PETSC_ARCH=default all; \
-    mv ${PACKAGES}/include/eigen3/Eigen ${PACKAGES}/include' && \
-    rm -rf /home/firedrake/petsc/**/externalpackages && \
-    rm -rf /home/firedrake/petsc/src/docs && \
-    rm -f /home/firedrake/petsc/src/**/tutorials/output/* && \
-    rm -f /home/firedrake/petsc/src/**/tests/output/*
-
-# Final stage: Install Firedrake and Animate, Movement, Goalie
-FROM ubuntu:24.04
-
-RUN apt-get update \
-    && apt-get -y dist-upgrade \
-    && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends tzdata \
-        curl vim docker.io openssh-client build-essential autoconf automake \
-        cmake gfortran git libopenblas-serial-dev libtool python3-dev python3-pip python3-tk \
-        python3-venv python3-requests zlib1g-dev libboost-dev sudo gmsh bison flex ninja-build \
-        libocct-ocaf-dev libocct-data-exchange-dev swig graphviz libcurl4-openssl-dev libxml2-dev \
+    && apt-get -y install curl parallel python3 python3-venv sudo \
     && rm -rf /var/lib/apt/lists/*
 
 # Change the `ubuntu` user to `firedrake`
@@ -119,42 +27,71 @@ RUN usermod -d /home/firedrake -m ubuntu \
     && groupmod -n firedrake ubuntu \
     && usermod -aG sudo firedrake \
     && echo "firedrake:docker" | chpasswd \
-    && echo "firedrake ALL=(ALL) NOPASSWD: ALL" >>/etc/sudoers \
+    && echo "firedrake ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers \
     && ldconfig
 
 USER firedrake
 WORKDIR /home/firedrake
 
-# Copy PETSc and MPI directories from petscbuild stage
-COPY --from=petscbuild /home/firedrake/petsc /home/firedrake/petsc
-
-# Set some useful environment variables
-ENV LC_ALL=C.UTF-8
-ENV PETSC_ARCH=default
-ENV PETSC_DIR=/home/firedrake/petsc
-ENV MPICH_DIR=${PETSC_DIR}/packages/bin
-ENV HDF5_DIR=${PETSC_DIR}/packages
-ENV HDF5_MPI=ON
 ENV OMP_NUM_THREADS=1
 ENV OPENBLAS_NUM_THREADS=1
 
+# Firedrake arch to build
+ARG ARCH="default"
+
+# Download firedrake-configure
+RUN curl -O https://raw.githubusercontent.com/firedrakeproject/firedrake/master/scripts/firedrake-configure
+
+# Install system dependencies
+RUN sudo apt-get update \
+    && sudo apt-get -y install \
+        $(python3 ./firedrake-configure --arch $ARCH --show-system-packages) \
+    && sudo rm -rf /var/lib/apt/lists/*
+
+
+# Install PETSc. We set the compiler optimisation flags manually here to
+# remove the default of '-march=native' which is not suitable for Docker images.
+# We use 'sed' to make sure that the options are appended.
+RUN git clone --depth 1 https://github.com/firedrakeproject/petsc.git \
+    && cd petsc \
+    && python3 ../firedrake-configure --arch $ARCH --show-petsc-configure-options | \
+        sed "s/$/ --COPTFLAGS='-O3 -mtune=generic' --CXXOPTFLAGS='-O3 -mtune=generic' --FOPTFLAGS='-O3 -mtune=generic' --download-chaco --download-eigen --download-parmetis --download-mmg --download-parmmg/" | \
+        xargs -L1 ./configure --with-make-np=12 \
+    && make \
+    && make check \
+    && rm -rf ./**/externalpackages \
+    && rm -rf ./src/docs \
+    && rm -f ./src/**/tutorials/output/* \
+    && rm -f ./src/**/tests/output/* \
+    && cd ..
+
+ENV PETSC_DIR=/home/firedrake/petsc PETSC_ARCH=arch-firedrake-$ARCH
+ENV PATH="$PETSC_DIR/$PETSC_ARCH/bin:$PATH" 
+
+# Install SLEPc
+RUN git clone --depth 1 https://github.com/firedrakeproject/slepc.git \
+    && cd slepc \
+    && ./configure \
+    && make SLEPC_DIR=/home/firedrake/slepc \
+    && cd ..
+
+ENV SLEPC_DIR=/home/firedrake/slepc
+
+ENV HDF5_MPI=ON
+ENV CC=mpicc CXX=mpicxx
+ENV CFLAGS="-mtune=generic" CPPFLAGS="-mtune=generic"
+ENV MPICC=$CC
+ENV PATH="/home/firedrake/.local/bin:$PATH" 
+
+# Install Firedrake, pass --break-system-packages because we don't want the
+# container to need a venv.
+RUN pip install --break-system-packages --verbose --no-binary h5py --src . \
+        --editable git+https://github.com/firedrakeproject/firedrake.git#egg=firedrake[ci]
+
 # Install Firedrake and Animate, Movement, Goalie
-RUN curl -O https://raw.githubusercontent.com/firedrakeproject/firedrake/master/scripts/firedrake-install && \
-    bash -c "python3 firedrake-install \
-		--no-package-manager \
-		--disable-ssh \
-		--honour-petsc-dir \
-		--mpihome=${MPICH_DIR} \
-		--mpicc=${MPICH_DIR}/mpicc \
-		--mpicxx=${MPICH_DIR}/mpicxx \
-		--mpif90=${MPICH_DIR}/mpif90 \
-		--mpiexec=${MPICH_DIR}/mpiexec \
-		--install thetis && \
-    source firedrake/bin/activate && \
-    cd firedrake/src && \
-    git clone https://github.com/mesh-adaptation/animate.git && \
+RUN git clone https://github.com/mesh-adaptation/animate.git && \
     git clone https://github.com/mesh-adaptation/movement.git && \
     git clone https://github.com/mesh-adaptation/goalie.git && \
-    cd animate && make install_dev && \
-    cd ../movement && make install_dev && \
-    cd ../goalie && make install_dev"
+    pip install --break-system-packages --editable animate[dev] && \
+    pip install --break-system-packages --editable movement[dev] && \
+    pip install --break-system-packages --editable goalie[dev]
