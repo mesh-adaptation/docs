@@ -25,29 +25,26 @@ jobs:
     container:
       image: ghcr.io/mesh-adaptation/${{ inputs.docker-image }}:pip
       options: --user root
-    # Allow executing mpiexec as root
     env:
+      # Allow executing mpiexec as root
       OMPI_ALLOW_RUN_AS_ROOT: '1'
       OMPI_ALLOW_RUN_AS_ROOT_CONFIRM: '1'
+      # Since we are root we need to set PYTHONPATH to find the installed packages
+      PYTHONPATH: /home/firedrake/.local/lib/python3.12/site-packages
 
     steps:
       - name: 'Check out the repo'
         id: checkout
-        uses: actions/checkout@v4     
+        uses: actions/checkout@v4
 
       - name: 'Install package'
-        run: |
-          . /home/firedrake/firedrake-venv/bin/activate
-          pip install --break-system-packages -e .[dev]
+        run: pip install --break-system-packages -e .[dev]
 
       - name: 'Lint'
-        run: |
-          . /home/firedrake/firedrake-venv/bin/activate
-          make lint
+        run: make lint
 
       - name: 'Run tests'
         run: |
-          . /home/firedrake/firedrake-venv/bin/activate
           ${{ inputs.test-command }}
           python3 $(which firedrake-clean)
           make coverage

@@ -2,39 +2,7 @@
 # as well as Animate, Goalie, and Movement. Based off
 # https://github.com/firedrakeproject/firedrake/blob/master/docker/Dockerfile.vanilla
 
-FROM ubuntu:latest
-
-# Set '-o pipefail' to avoid linter error (https://github.com/hadolint/hadolint/wiki/DL4006)
-SHELL ["/bin/bash", "-o", "pipefail", "-c"]
-
-# Use a more sane locale
-ENV LC_ALL=C.UTF-8
-
-# Avoid tzdata prompt
-# (https://stackoverflow.com/questions/61388002/how-to-avoid-question-during-the-docker-build)
-ENV DEBIAN_FRONTEND=noninteractive
-ENV TZ=Europe/London
-
-# Install 'parallel' because it is needed by 'firedrake-run-split-tests'
-RUN apt-get update \
-    && apt-get -y install curl parallel python3 python3-venv sudo \
-    && rm -rf /var/lib/apt/lists/*
-
-# Change the `ubuntu` user to `firedrake`
-# and ensure that we do not run as root on self-hosted systems
-RUN usermod -d /home/firedrake -m ubuntu \
-    && usermod -l firedrake ubuntu \
-    && groupmod -n firedrake ubuntu \
-    && usermod -aG sudo firedrake \
-    && echo "firedrake:docker" | chpasswd \
-    && echo "firedrake ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers \
-    && ldconfig
-
-USER firedrake
-WORKDIR /home/firedrake
-
-ENV OMP_NUM_THREADS=1
-ENV OPENBLAS_NUM_THREADS=1
+FROM firedrakeproject/firedrake-env:latest
 
 # Download firedrake-configure
 RUN curl -O https://raw.githubusercontent.com/firedrakeproject/firedrake/master/scripts/firedrake-configure
@@ -45,13 +13,21 @@ RUN sudo apt-get update \
         $(python3 ./firedrake-configure --show-system-packages) \
     && sudo rm -rf /var/lib/apt/lists/*
 
-# Install PETSc. We set the compiler optimisation flags manually here to
-# remove the default of '-march=native' which is not suitable for Docker images.
-# We use 'sed' to make sure that the options are appended.
+# Install PETSc with additional packages for mesh adaptation. 
+# We set the compiler optimisation flags manually here to remove the default of
+# '-march=native' which is not suitable for Docker images.
 RUN git clone --depth 1 https://github.com/firedrakeproject/petsc.git \
     && cd petsc \
     && python3 ../firedrake-configure --show-petsc-configure-options | \
-        sed "s/$/ --COPTFLAGS='-O3 -mtune=generic' --CXXOPTFLAGS='-O3 -mtune=generic' --FOPTFLAGS='-O3 -mtune=generic' --download-chaco --download-eigen --download-parmetis --download-mmg --download-parmmg/" | \
+        sed "s/$/ \
+            --COPTFLAGS='-O3 -mtune=generic' \
+            --CXXOPTFLAGS='-O3 -mtune=generic' \
+            --FOPTFLAGS='-O3 -mtune=generic' \
+            --download-chaco \
+            --download-eigen \
+            --download-parmetis \
+            --download-mmg \
+            --download-parmmg/" | \
         xargs -L1 ./configure --with-make-np=12 \
     && make \
     && make check \
@@ -61,27 +37,25 @@ RUN git clone --depth 1 https://github.com/firedrakeproject/petsc.git \
     && rm -f ./src/**/tests/output/* \
     && cd ..
 
+# PETSc environment variables
 ENV PETSC_DIR=/home/firedrake/petsc PETSC_ARCH=arch-firedrake-default
 ENV PATH="$PETSC_DIR/$PETSC_ARCH/bin:$PATH" 
 
+# Compiler settings
 ENV HDF5_MPI=ON
 ENV CC=mpicc CXX=mpicxx
 ENV CFLAGS="-mtune=generic" CPPFLAGS="-mtune=generic"
 ENV MPICC=$CC
 ENV PATH="/home/firedrake/.local/bin:$PATH" 
 
-# Create a venv and install Firedrake
-RUN python3 -m venv firedrake-venv && \
-    source firedrake-venv/bin/activate && \
-    pip install --upgrade pip && \
-    pip install --verbose --no-binary h5py --src . -e \
+# Install Firedrake
+RUN pip install --break-system-packages --verbose --no-binary h5py --src . -e \
         git+https://github.com/firedrakeproject/firedrake.git#egg=firedrake[test]
 
 # Install Animate, Movement, Goalie
-RUN source firedrake-venv/bin/activate && \
-    git clone https://github.com/mesh-adaptation/animate.git && \
+RUN git clone https://github.com/mesh-adaptation/animate.git && \
     git clone https://github.com/mesh-adaptation/movement.git && \
     git clone https://github.com/mesh-adaptation/goalie.git && \
-    pip install -e animate[dev] && \
-    pip install -e movement[dev] && \
-    pip install -e goalie[dev]
+    pip install --break-system-packages -e animate[dev] && \
+    pip install --break-system-packages -e movement[dev] && \
+    pip install --break-system-packages -e goalie[dev]
