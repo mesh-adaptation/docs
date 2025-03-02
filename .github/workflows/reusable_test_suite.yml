@@ -30,7 +30,7 @@ jobs:
       OMPI_ALLOW_RUN_AS_ROOT: '1'
       OMPI_ALLOW_RUN_AS_ROOT_CONFIRM: '1'
       # Since we are root we need to set PYTHONPATH to find the installed packages
-      PYTHONPATH: /home/firedrake/.local/lib/python3.12/site-packages
+      PYTHONPATH: /home/firedrake/firedrake:/home/firedrake/.local/lib/python3.12/site-packages
 
     steps:
       - name: 'Check out the repo'
@@ -42,9 +42,6 @@ jobs:
 
       - name: 'Lint'
         run: make lint
-
-      - name: Setup tmate session
-        uses: mxschmitt/action-tmate@v3
 
       - name: 'Run tests'
         run: |
