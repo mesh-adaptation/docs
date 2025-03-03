@@ -47,4 +47,8 @@ jobs:
         run: |
           ${{ inputs.test-command }}
           python3 $(which firedrake-clean)
-          make coverage
+          python3 -m coverage erase
+          python3 -m coverage run --parallel-mode --source=animate -m pytest -v -k "parallel[1] or not parallel" test
+          mpiexec -n 2 python3 -m coverage run --parallel-mode --source=animate -m pytest -v -m parallel[2] test
+          python3 -m coverage combine
+          python3 -m coverage report -m
