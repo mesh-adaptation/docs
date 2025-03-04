@@ -35,6 +35,4 @@ jobs:
       - name: zizmor
         if: always()
         run: |
-          cd ${{ github.workspace }}
-          . ftorch_venv/bin/activate
           zizmor .github/workflows/*.yml
