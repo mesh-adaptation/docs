@@ -15,13 +15,13 @@ on:
       - '.github/workflows/docker_firedrake-um2n.yml'
       - 'docker/Dockerfile.firedrake-um2n'
 
-  # Trigger this workflow when docker_firedrake-parmmg.yml completes on the main branch
-  workflow_run:
-    workflows: 'Build bespoke Firedrake Docker container'
-    types:
-      - completed
-    branches:
-      - main
+    # Trigger this workflow when docker_firedrake-parmmg.yml completes on the main branch
+    workflow_run:
+      workflows: 'Build bespoke Firedrake Docker container'
+      types:
+        - completed
+      branches:
+        - main
 
   # Manually trigger the workflow
   workflow_dispatch:
