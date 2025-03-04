@@ -58,6 +58,14 @@ jobs:
             mpiexec -n 2 python3 -m coverage run --parallel-mode --source=${{ github.event.repository.name }} -m pytest -v -m parallel[2] test
           fi
 
+      - name: 'Run parallel tests (nprocs = 3)'
+        run: |
+          if pytest --collect-only -m parallel[3] test | grep -q 'no tests collected'; then
+            echo "No parallel[3] tests found."
+          else
+            mpiexec -n 3 python3 -m coverage run --parallel-mode --source=${{ github.event.repository.name }} -m pytest -v -m parallel[3] test
+          fi
+
       - name: 'Generate coverage report'
         run: |
           python3 -m coverage combine
