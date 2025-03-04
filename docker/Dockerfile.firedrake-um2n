@@ -3,15 +3,32 @@
 # Based on firedrake
 FROM ghcr.io/mesh-adaptation/firedrake-parmmg:latest
 
+# Ensure we are root when installing system dependencies
+USER root
+
+RUN apt-get update && apt-get install -y \
+    libglu1 \
+    libgl1 \
+    libxrender1 \
+    libxcursor1 \
+    libxft2 \
+    libxinerama1 \
+    libx11-dev \
+    libxrender-dev \
+    libxcursor-dev \
+    libxft-dev \
+    libxinerama-dev \
+    mesa-utils \
+    libglx-mesa0 \
+    && rm -rf /var/lib/apt/lists/*
+
 USER firedrake
 WORKDIR /home/firedrake
 
-RUN bash -c "source firedrake/bin/activate && \
-	  pip3 install torch --index-url https://download.pytorch.org/whl/cpu && \
-	  cd firedrake/src && \
-	  git clone https://github.com/mesh-adaptation/UM2N.git && \
-	  python3 -m pip uninstall cffconvert -y && \
-	  python3 -m pip install -e UM2N[dev]"
+RUN pip3 install --break-system-packages torch --index-url https://download.pytorch.org/whl/cpu && \
+    git clone https://github.com/mesh-adaptation/UM2N.git && \
+    python3 -m pip uninstall --break-system-packages cffconvert -y && \
+    python3 -m pip install --break-system-packages -e UM2N[dev]
 
 # NOTE: cffconvert is not currently used in UM2N and requires a conflicting
 # version of jsonschema with other dependencies.
