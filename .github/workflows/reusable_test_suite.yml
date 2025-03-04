@@ -45,6 +45,7 @@ jobs:
 
       - name: 'Run serial tests'
         run: |
+          ${{ inputs.test-command }}
           python3 $(which firedrake-clean)
           python3 -m coverage erase
           python3 -m coverage run --parallel-mode --source=${{ github.event.repository.name }} -m pytest -v -k "parallel[1] or not parallel" test
@@ -55,6 +56,14 @@ jobs:
             echo "No parallel[2] tests found."
           else
             mpiexec -n 2 python3 -m coverage run --parallel-mode --source=${{ github.event.repository.name }} -m pytest -v -m parallel[2] test
+          fi
+
+      - name: 'Run parallel tests (nprocs = 3)'
+        run: |
+          if pytest --collect-only -m parallel[3] test | grep -q 'no tests collected'; then
+            echo "No parallel[3] tests found."
+          else
+            mpiexec -n 3 --use-hwthread-cpus python3 -m coverage run --parallel-mode --source=${{ github.event.repository.name }} -m pytest -v -m parallel[3] test
           fi
 
       - name: 'Generate coverage report'
