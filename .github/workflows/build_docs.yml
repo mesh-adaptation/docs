@@ -59,6 +59,8 @@ jobs:
     if: ${{ needs.check_updates.outputs.updates_found == 'true' || github.event_name != 'schedule' }}
     steps:
       - uses: actions/checkout@v3
+        with:
+          persist-credentials: false
 
       - name: Update Animate, Goalie, Movement, and UM2N
         run: |

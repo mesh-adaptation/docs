@@ -19,4 +19,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+        with:
+          persist-credentials: false
       - uses: Andrew-Chen-Wang/github-wiki-action@v4
