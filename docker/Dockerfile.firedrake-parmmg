@@ -48,11 +48,12 @@ ENV CFLAGS="-mtune=generic" CPPFLAGS="-mtune=generic"
 ENV MPICC=$CC
 ENV PATH="/home/firedrake/.local/bin:$PATH" 
 
-# Install Firedrake
+# Install Firedrake; pass --break-system-packages since we are installing outside of a
+# virtual environment
 RUN pip install --break-system-packages --verbose --no-binary h5py --src . -e \
         git+https://github.com/firedrakeproject/firedrake.git#egg=firedrake[test]
 
-# Install Animate, Movement, Goalie
+# Install Animate, Movement, Goalie and their dependencies
 RUN git clone https://github.com/mesh-adaptation/animate.git && \
     git clone https://github.com/mesh-adaptation/movement.git && \
     git clone https://github.com/mesh-adaptation/goalie.git && \
