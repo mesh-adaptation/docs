@@ -8,8 +8,8 @@ on:
         required: false
         default: 'firedrake-parmmg'
         type: string
-      test-command:
-        description: 'Command to run before running tests'
+      animate-checkpoint-dirpath:
+        description: 'Path to the directory where checkpoints are stored'
         required: false
         type: string
 
@@ -25,6 +25,10 @@ jobs:
     container:
       image: ghcr.io/mesh-adaptation/${{ inputs.docker-image }}:latest
       options: --user root
+    env:
+      # Name of the repository that triggered the workflow
+      REPO_NAME: ${{ github.event.repository.name }}
+      ANIMATE_CHECKPOINT_DIR: ${{ inputs.animate-checkpoint-dirpath }}
 
     steps:
       - name: 'Check out the repo'
@@ -47,8 +51,7 @@ jobs:
       - name: 'Run tests'
         run: |
           . /home/firedrake/firedrake/bin/activate
-          ${{ inputs.test-command }}
           python $(which firedrake-clean)
           python -m coverage erase
-          python -m coverage run --source=${{ github.event.repository.name }} -m pytest -v --durations=20 test
+          python -m coverage run --source=${REPO_NAME} -m pytest -v --durations=20 test
           python -m coverage report -m
