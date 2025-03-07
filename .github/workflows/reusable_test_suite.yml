@@ -8,10 +8,6 @@ on:
         required: false
         default: 'firedrake-parmmg'
         type: string
-      animate-checkpoint-dirpath:
-        description: 'Path to the directory where checkpoints are stored'
-        required: false
-        type: string
 
 # Cancel jobs running if new commits are pushed
 concurrency:
@@ -28,7 +24,7 @@ jobs:
     env:
       # Name of the repository that triggered the workflow
       REPO_NAME: ${{ github.event.repository.name }}
-      ANIMATE_CHECKPOINT_DIR: ${{ inputs.animate-checkpoint-dirpath }}
+      ANIMATE_CHECKPOINT_DIR: ${{ github.workspace }}/.checkpoints
 
     steps:
       - name: 'Check out the repo'
