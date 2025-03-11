@@ -1,6 +1,7 @@
 name: Linting
 
 on:
+  workflow_call:
   push:
     branches:
       - "main"
