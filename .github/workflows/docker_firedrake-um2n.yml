@@ -17,7 +17,8 @@ on:
 
   # Trigger this workflow when docker_firedrake-parmmg.yml completes on the main branch
   workflow_run:
-    workflows: 'Build bespoke Firedrake Docker container'
+    workflows:
+      - 'Build bespoke Firedrake Docker container'
     types:
       - completed
     branches:
