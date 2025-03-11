@@ -1,4 +1,4 @@
-name: Linting
+name: GitHub Actions workflow Linting
 
 on:
   workflow_call:
