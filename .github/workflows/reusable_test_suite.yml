@@ -25,6 +25,11 @@ jobs:
       # Name of the repository that triggered the workflow
       REPO_NAME: ${{ github.event.repository.name }}
       ANIMATE_CHECKPOINT_DIR: ${{ github.workspace }}/.checkpoints
+      # Allow executing mpiexec as root
+      OMPI_ALLOW_RUN_AS_ROOT: '1'
+      OMPI_ALLOW_RUN_AS_ROOT_CONFIRM: '1'
+      # Since we are root we need to set PYTHONPATH to find the installed packages
+      PYTHONPATH: /home/firedrake/firedrake:/home/firedrake/animate:/home/firedrake/goalie:/home/firedrake/movement:/home/firedrake/.local/lib/python3.12/site-packages
 
     steps:
       - name: 'Check out the repo'
@@ -34,20 +39,26 @@ jobs:
           persist-credentials: false
 
       - name: 'Install package'
-        run: |
-          . /home/firedrake/firedrake/bin/activate
-          git config --global --add safe.directory '*'
-          make install_dev
+        run: pip install --break-system-packages -e .[dev]
 
       - name: 'Lint'
-        run: |
-          . /home/firedrake/firedrake/bin/activate
-          make lint
+        run: make lint
 
-      - name: 'Run tests'
+      - name: 'Run serial tests'
         run: |
-          . /home/firedrake/firedrake/bin/activate
-          python $(which firedrake-clean)
-          python -m coverage erase
-          python -m coverage run --source=${REPO_NAME} -m pytest -v --durations=20 test
-          python -m coverage report -m
+          python3 $(which firedrake-clean)
+          python3 -m coverage erase
+          python3 -m coverage run --parallel-mode --source=${{ github.event.repository.name }} -m pytest -v -k "parallel[1] or not parallel" test
+
+      - name: 'Run parallel tests (nprocs = 2)'
+        run: |
+          if pytest --collect-only -m parallel[2] test | grep -q 'no tests collected'; then
+            echo "No parallel[2] tests found."
+          else
+            mpiexec -n 2 python3 -m coverage run --parallel-mode --source=${{ github.event.repository.name }} -m pytest -v -m parallel[2] test
+          fi
+
+      - name: 'Generate coverage report'
+        run: |
+          python3 -m coverage combine
+          python3 -m coverage report -m
