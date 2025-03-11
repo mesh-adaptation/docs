@@ -33,6 +33,6 @@ jobs:
 
       # Apply GitHub Actions linter, zizmor
       - name: zizmor
-        if: always()
+        if: ${{ !cancelled() }}
         run: |
           zizmor .github/workflows/*.yml
