@@ -36,4 +36,4 @@ jobs:
       - name: zizmor
         if: ${{ !cancelled() }}
         run: |
-          zizmor --persona=auditor .github/workflows/*.yml
+          zizmor .github/workflows/*.yml
