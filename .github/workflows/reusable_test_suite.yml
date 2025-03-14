@@ -46,7 +46,6 @@ jobs:
 
       - name: 'Run serial tests'
         run: |
-          ${{ inputs.test-command }}
           python3 $(which firedrake-clean)
           python3 -m coverage erase
           python3 -m coverage run --parallel-mode --source=${REPO_NAME} -m pytest -v -k "parallel[1] or not parallel" test
