@@ -29,7 +29,7 @@ jobs:
       OMPI_ALLOW_RUN_AS_ROOT: '1'
       OMPI_ALLOW_RUN_AS_ROOT_CONFIRM: '1'
       # Since we are root we need to set PYTHONPATH to find the installed packages
-      PYTHONPATH: /home/firedrake/firedrake:/home/firedrake/animate:/home/firedrake/goalie:/home/firedrake/movement:/home/firedrake/.local/lib/python3.12/site-packages
+      PYTHONPATH: /home/firedrake/firedrake:/home/firedrake/animate:/home/firedrake/goalie:/home/firedrake/movement:/home/firedrake/UM2N:/home/firedrake/.local/lib/python3.12/site-packages
 
     steps:
       - name: 'Check out the repo'
@@ -56,6 +56,14 @@ jobs:
             echo "No parallel[2] tests found."
           else
             mpiexec -n 2 python3 -m coverage run --parallel-mode --source=${REPO_NAME} -m pytest -v -m parallel[2] test
+          fi
+
+      - name: 'Run parallel tests (nprocs = 3)'
+        run: |
+          if pytest --collect-only -m parallel[3] test | grep -q 'no tests collected'; then
+            echo "No parallel[3] tests found."
+          else
+            mpiexec -n 3 --use-hwthread-cpus python3 -m coverage run --parallel-mode --source=${REPO_NAME} -m pytest -v -m parallel[3] test
           fi
 
       - name: 'Generate coverage report'
