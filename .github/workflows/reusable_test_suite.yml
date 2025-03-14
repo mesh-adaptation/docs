@@ -19,7 +19,7 @@ jobs:
     name: 'Test suite'
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/mesh-adaptation/${{ inputs.docker-image }}:pip
+      image: ghcr.io/mesh-adaptation/${{ inputs.docker-image }}:latest
       options: --user root
     env:
       # Name of the repository that triggered the workflow
