@@ -16,7 +16,7 @@ on:
       - 'docker/Dockerfile.firedrake-um2n'
 
   # Trigger this workflow when docker_firedrake-parmmg.yml completes on the main branch
-  workflow_run:
+  workflow_run:  # zizmor: ignore[dangerous-triggers]
     workflows:
       - 'Build bespoke Firedrake Docker container'
     types:
@@ -34,6 +34,9 @@ concurrency:
 
 jobs:
   docker:
+    if: |
+      github.event_name != 'workflow_run' || 
+      github.event.workflow_run.head_repository.owner.login == github.event.workflow_run.repository.owner.login
     uses: ./.github/workflows/reusable_docker_build.yml
     with:
       dockerfile-path: 'docker/Dockerfile.firedrake-um2n'
