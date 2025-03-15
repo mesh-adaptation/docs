@@ -29,7 +29,7 @@ jobs:
     steps:
       - name: 'Download firedrake-configure script'
         run: |
-          curl -O https://raw.githubusercontent.com/firedrakeproject/firedrake/master/scripts/firedrake-configure
+          sudo curl -O https://raw.githubusercontent.com/firedrakeproject/firedrake/master/scripts/firedrake-configure
 
       - name: 'Install system dependencies'
         run: sudo apt install $(python3 firedrake-configure --show-system-packages)
