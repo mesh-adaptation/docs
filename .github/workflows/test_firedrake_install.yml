@@ -25,6 +25,7 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: firedrakeproject/firedrake-env:latest
+      options: --user root
 
     steps:
       - name: 'Download firedrake-configure script'
