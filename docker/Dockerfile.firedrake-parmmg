@@ -5,20 +5,23 @@
 FROM firedrakeproject/firedrake-env:latest
 
 # Download firedrake-configure
-RUN curl -O https://raw.githubusercontent.com/firedrakeproject/firedrake/master/scripts/firedrake-configure
+RUN curl -O --output-dir /opt https://raw.githubusercontent.com/firedrakeproject/firedrake/master/scripts/firedrake-configure
 
 # Install system dependencies
-RUN sudo apt-get update \
-    && sudo apt-get -y install \
-        $(python3 ./firedrake-configure --show-system-packages) \
-    && sudo rm -rf /var/lib/apt/lists/*
+RUN apt-get update \
+    && apt-get -y install \
+        $(python3 /opt/firedrake-configure --show-system-packages) \
+    && rm -rf /var/lib/apt/lists/*
+
+# OpenMPI will complain if mpiexec is invoked as root unless these are set
+ENV OMPI_ALLOW_RUN_AS_ROOT=1 OMPI_ALLOW_RUN_AS_ROOT_CONFIRM=1
 
 # Install PETSc with additional packages for mesh adaptation. 
 # We set the compiler optimisation flags manually here to remove the default of
 # '-march=native' which is not suitable for Docker images.
-RUN git clone --depth 1 https://github.com/firedrakeproject/petsc.git \
-    && cd petsc \
-    && python3 ../firedrake-configure --show-petsc-configure-options | \
+RUN git clone --depth 1 https://github.com/firedrakeproject/petsc.git /opt/petsc \
+    && cd /opt/petsc \
+    && python3 /opt/firedrake-configure --show-petsc-configure-options | \
         sed "s/$/ \
             --COPTFLAGS='-O3 -mtune=generic' \
             --CXXOPTFLAGS='-O3 -mtune=generic' \
@@ -35,10 +38,10 @@ RUN git clone --depth 1 https://github.com/firedrakeproject/petsc.git \
     && rm -rf ./src/docs \
     && rm -f ./src/**/tutorials/output/* \
     && rm -f ./src/**/tests/output/* \
-    && cd ..
+    && cd - || exit
 
 # PETSc environment variables
-ENV PETSC_DIR=/home/firedrake/petsc PETSC_ARCH=arch-firedrake-default
+ENV PETSC_DIR=/opt/petsc PETSC_ARCH=arch-firedrake-default
 ENV PATH="$PETSC_DIR/$PETSC_ARCH/bin:$PATH" 
 
 # Compiler settings
@@ -48,15 +51,14 @@ ENV CFLAGS="-mtune=generic" CPPFLAGS="-mtune=generic"
 ENV MPICC=$CC
 ENV PATH="/home/firedrake/.local/bin:$PATH" 
 
-# Install Firedrake; pass --break-system-packages since we are installing outside of a
-# virtual environment
-RUN pip install --break-system-packages --verbose --no-binary h5py --src . -e \
+# Install Firedrake
+RUN pip install --verbose --no-binary h5py --src . -e \
         git+https://github.com/firedrakeproject/firedrake.git#egg=firedrake[test]
 
 # Install Animate, Movement, Goalie and their dependencies
 RUN git clone https://github.com/mesh-adaptation/animate.git && \
     git clone https://github.com/mesh-adaptation/movement.git && \
     git clone https://github.com/mesh-adaptation/goalie.git && \
-    pip install --break-system-packages -e animate[dev] && \
-    pip install --break-system-packages -e movement[dev] && \
-    pip install --break-system-packages -e goalie[dev]
+    pip install -e animate[dev] && \
+    pip install -e movement[dev] && \
+    pip install -e goalie[dev]
