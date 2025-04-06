@@ -25,10 +25,10 @@ RUN apt-get update && apt-get install -y \
 USER firedrake
 WORKDIR /home/firedrake
 
-RUN pip3 install --break-system-packages torch --index-url https://download.pytorch.org/whl/cpu && \
+RUN pip3 install torch --index-url https://download.pytorch.org/whl/cpu && \
     git clone https://github.com/mesh-adaptation/UM2N.git && \
-    python3 -m pip uninstall --break-system-packages cffconvert -y && \
-    python3 -m pip install --break-system-packages -e UM2N[dev]
+    python3 -m pip uninstall cffconvert -y && \
+    python3 -m pip install -e UM2N[dev]
 
 # NOTE: cffconvert is not currently used in UM2N and requires a conflicting
 # version of jsonschema with other dependencies.
