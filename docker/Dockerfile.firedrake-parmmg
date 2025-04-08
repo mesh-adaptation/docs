@@ -2,40 +2,70 @@
 # as well as Animate, Goalie, and Movement. Based off
 # https://github.com/firedrakeproject/firedrake/blob/master/docker/Dockerfile.vanilla
 
-FROM firedrakeproject/firedrake-env:latest
+FROM ubuntu:latest
 
+# ------------------------------
+# Environment setup
+# ------------------------------
+USER root
+
+# Use a more sane locale
+ENV LC_ALL=C.UTF-8
+# Avoid tzdata prompt (https://stackoverflow.com/questions/61388002/how-to-avoid-question-during-the-docker-build)
+ENV DEBIAN_FRONTEND=noninteractive
+ENV TZ=Europe/London
+ENV OMP_NUM_THREADS=1 
+ENV OPENBLAS_NUM_THREADS=1
+# Allow pip to install into system package locations without prompting
+ENV PIP_BREAK_SYSTEM_PACKAGES=1
+
+RUN apt-get update \
+    && apt-get -y install curl python3 python3-pip python3-venv sudo \
+    && rm -rf /var/lib/apt/lists/*
+
+# Change the `ubuntu` user to `firedrake`
+RUN usermod -d /home/firedrake -m ubuntu \
+    && usermod -l firedrake ubuntu \
+    && groupmod -n firedrake ubuntu \
+    && usermod -aG sudo firedrake \
+    && echo "firedrake:docker" | chpasswd \
+    && echo "firedrake ALL=(ALL) NOPASSWD: ALL" >>/etc/sudoers \
+    && ldconfig
+
+WORKDIR /home/firedrake
+
+# ------------------------------
+# Install Firedrake dependencies
+# ------------------------------
 # Download firedrake-configure
 RUN curl -O https://raw.githubusercontent.com/firedrakeproject/firedrake/master/scripts/firedrake-configure
 
 # Install system dependencies
-RUN sudo apt-get update \
-    && sudo apt-get -y install \
-        $(python3 ./firedrake-configure --show-system-packages) \
-    && sudo rm -rf /var/lib/apt/lists/*
+RUN apt-get update \
+    && apt-get -y install \
+        $(python3 firedrake-configure --show-system-packages) \
+    && rm -rf /var/lib/apt/lists/*
 
-# Install PETSc with additional packages for mesh adaptation. 
+# ------------------------------
+# Install PETSc with dependencies for mesh adaptation
+# ------------------------------
+# OpenMPI will complain if mpiexec is invoked as root unless these are set
+ENV OMPI_ALLOW_RUN_AS_ROOT=1 OMPI_ALLOW_RUN_AS_ROOT_CONFIRM=1
+
 # We set the compiler optimisation flags manually here to remove the default of
 # '-march=native' which is not suitable for Docker images.
 RUN git clone --depth 1 https://github.com/firedrakeproject/petsc.git \
     && cd petsc \
-    && python3 ../firedrake-configure --show-petsc-configure-options | \
-        sed "s/$/ \
-            --COPTFLAGS='-O3 -mtune=generic' \
-            --CXXOPTFLAGS='-O3 -mtune=generic' \
-            --FOPTFLAGS='-O3 -mtune=generic' \
-            --download-chaco \
-            --download-eigen \
-            --download-parmetis \
-            --download-mmg \
-            --download-parmmg/" | \
-        xargs -L1 ./configure --with-make-np=12 \
+    && python3 /home/firedrake/firedrake-configure --show-petsc-configure-options | \
+        sed "s/$/ --COPTFLAGS='-O3 -mtune=generic' --CXXOPTFLAGS='-O3 -mtune=generic' --FOPTFLAGS='-O3 -mtune=generic'/" | \
+        xargs -L1 ./configure --with-make-np=12 --download-chaco --download-eigen --download-parmetis --download-mmg --download-parmmg \
     && make \
     && make check \
     && rm -rf ./**/externalpackages \
     && rm -rf ./src/docs \
     && rm -f ./src/**/tutorials/output/* \
     && rm -f ./src/**/tests/output/* \
-    && cd ..
+    && cd - || exit
 
 # PETSc environment variables
 ENV PETSC_DIR=/home/firedrake/petsc PETSC_ARCH=arch-firedrake-default
@@ -46,17 +76,24 @@ ENV HDF5_MPI=ON
 ENV CC=mpicc CXX=mpicxx
 ENV CFLAGS="-mtune=generic" CPPFLAGS="-mtune=generic"
 ENV MPICC=$CC
-ENV PATH="/home/firedrake/.local/bin:$PATH" 
+ENV PATH="/home/firedrake/.local/bin:$PATH"
 
-# Install Firedrake; pass --break-system-packages since we are installing outside of a
-# virtual environment
-RUN pip install --break-system-packages --verbose --no-binary h5py --src . -e \
+# ------------------------------
+# Install Firedrake and mesh adaptation packages
+# ------------------------------
+USER firedrake
+
+# Install Firedrake
+RUN pip install --verbose --no-binary h5py --src . -e \
         git+https://github.com/firedrakeproject/firedrake.git#egg=firedrake[test]
+
+# Install Thetis
+RUN pip install --verbose --src . -e git+https://github.com/thetisproject/thetis.git#egg=thetis
 
 # Install Animate, Movement, Goalie and their dependencies
 RUN git clone https://github.com/mesh-adaptation/animate.git && \
     git clone https://github.com/mesh-adaptation/movement.git && \
     git clone https://github.com/mesh-adaptation/goalie.git && \
-    pip install --break-system-packages -e animate[dev] && \
-    pip install --break-system-packages -e movement[dev] && \
-    pip install --break-system-packages -e goalie[dev]
+    pip install -e animate[dev] && \
+    pip install -e movement[dev] && \
+    pip install -e goalie[dev]

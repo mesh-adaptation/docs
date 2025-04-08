@@ -25,9 +25,6 @@ jobs:
       # Name of the repository that triggered the workflow
       REPO_NAME: ${{ github.event.repository.name }}
       ANIMATE_CHECKPOINT_DIR: ${{ github.workspace }}/.checkpoints
-      # Allow executing mpiexec as root
-      OMPI_ALLOW_RUN_AS_ROOT: '1'
-      OMPI_ALLOW_RUN_AS_ROOT_CONFIRM: '1'
       # Since we are root we need to set PYTHONPATH to find the installed packages
       PYTHONPATH: /home/firedrake/firedrake:/home/firedrake/animate:/home/firedrake/goalie:/home/firedrake/movement:/home/firedrake/UM2N:/home/firedrake/.local/lib/python3.12/site-packages
 
@@ -39,7 +36,7 @@ jobs:
           persist-credentials: false
 
       - name: 'Install package'
-        run: pip install --break-system-packages -e .[dev]
+        run: pip install -e .[dev]
 
       - name: 'Lint'
         run: make lint
