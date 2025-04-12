@@ -1,10 +1,9 @@
 name: 'Test Firedrake Installation'
 
 on:
-  # Trigger when this or any file in the install directory changes
+  # Trigger when this workflow changes in an open PR
   pull_request:
     paths:
-      - 'install/**'
       - '.github/workflows/test_firedrake_install.yml'
 
   # Trigger the workflow on the 1st day of every month at midnight
