@@ -58,13 +58,16 @@ jobs:
           pip cache remove petsc4py
           pip install --no-binary h5py --src . -e git+https://github.com/firedrakeproject/firedrake.git#egg=firedrake[check]
 
+      # Do not call `make test` here since we need --use-hwthread-cpus for nprocs=3 tests 
       - name: 'Install and test Animate'
         run: |
           . venv/bin/activate
           git clone https://github.com/mesh-adaptation/animate.git
           cd animate
           make install_dev
-          make test
+          python3 -m pytest -v -k "parallel[1] or not parallel" test
+          mpiexec -n 2 python3 -m pytest -v -m parallel[2] test
+          mpiexec -n 3 --use-hwthread-cpus python3 -m pytest -v -m parallel[3] test
 
       - name: 'Install and test Goalie'
         if: ${{ !cancelled() }}
