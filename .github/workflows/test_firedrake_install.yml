@@ -31,6 +31,10 @@ jobs:
       OMPI_ALLOW_RUN_AS_ROOT_CONFIRM: 1
 
     steps:
+      - name: Fix HOME
+        # GitHub sets HOME to /github/home (https://github.com/actions/runner/issues/863)
+        run: echo "HOME=/root" >> "$GITHUB_ENV"
+
       - name: 'Install system dependencies'
         run: |
           apt-get update
