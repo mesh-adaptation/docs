@@ -16,13 +16,13 @@ python3 ../firedrake-configure --show-petsc-configure-options | xargs -L1 ./conf
 
 ## Docker container approach
 
-A bespoke Firedrake Docker container exists and can be downloaded and installed as an alternative to the above:
+A bespoke Firedrake Docker image exists and can be downloaded and run as an alternative to the above:
 ```
 docker pull ghcr.io/mesh-adaptation/firedrake-parmmg:latest
-docker run --rm -it -v ${HOME}:${HOME} ghcr.io/mesh-adaptation/firedrake-parmmg:latest
+docker run -it ghcr.io/mesh-adaptation/firedrake-parmmg:latest
 ```
 
-NOTE: by installing via a Docker image with ``${HOME}`` you are giving Docker access to your home space.
+For more information on how to run docker containers, see the [official documentation](https://docs.docker.com/engine/containers/run/). For example, since all data inside a container is only accessible from inside the container, it is useful to create [filesystem mounts](https://docs.docker.com/engine/containers/run/#filesystem-mounts) to be able to access data from outside the container.
 
 ## Installing Mesh Adaptation modules
 
