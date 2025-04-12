@@ -85,7 +85,7 @@ USER firedrake
 
 # Install Firedrake
 RUN pip install --verbose --no-binary h5py --src . -e \
-        git+https://github.com/firedrakeproject/firedrake.git#egg=firedrake[test]
+        git+https://github.com/firedrakeproject/firedrake.git#egg=firedrake[check]
 
 # Install Thetis
 RUN pip install --verbose --src . -e git+https://github.com/thetisproject/thetis.git#egg=thetis
