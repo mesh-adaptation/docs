@@ -56,7 +56,7 @@ jobs:
           . venv/bin/activate
           export $(python3 firedrake-configure --show-env)
           pip cache remove petsc4py
-          pip install --no-binary h5py "firedrake @ git+https://github.com/firedrakeproject/firedrake.git#[check]"
+          pip install --no-binary h5py --src . -e git+https://github.com/firedrakeproject/firedrake.git#egg=firedrake[check]
 
       - name: 'Install and test Animate'
         run: |
