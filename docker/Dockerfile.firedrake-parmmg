@@ -54,7 +54,7 @@ ENV OMPI_ALLOW_RUN_AS_ROOT=1 OMPI_ALLOW_RUN_AS_ROOT_CONFIRM=1
 
 # We set the compiler optimisation flags manually here to remove the default of
 # '-march=native' which is not suitable for Docker images.
-RUN git clone --depth 1 https://github.com/firedrakeproject/petsc.git \
+RUN git clone --depth 1 --branch $(python3 firedrake-configure --show-petsc-version) https://gitlab.com/petsc/petsc.git \
     && cd petsc \
     && python3 /home/firedrake/firedrake-configure --show-petsc-configure-options | \
         sed "s/$/ --COPTFLAGS='-O3 -mtune=generic' --CXXOPTFLAGS='-O3 -mtune=generic' --FOPTFLAGS='-O3 -mtune=generic'/" | \
