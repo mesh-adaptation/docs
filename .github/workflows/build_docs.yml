@@ -82,9 +82,9 @@ jobs:
       - name: Build HTML Documentation
         run: |
           cd docs
-          make run_animate_demos
-          make run_goalie_demos
-          make run_movement_demos
+          make run_animate_demos PKGDIR=/home/firedrake
+          make run_goalie_demos PKGDIR=/home/firedrake
+          make run_movement_demos PKGDIR=/home/firedrake
           make html PKGDIR=/home/firedrake
         working-directory: /home/firedrake/output/
         shell: bash
