@@ -7,12 +7,13 @@ SPHINXAPIDOC  = sphinx-apidoc
 SPHINXPROJ    = Documentation
 SOURCEDIR     = source
 BUILDDIR      = build
-PYTHON        = ${VIRTUAL_ENV}/bin/python3
+PYTHON        = $$(which python3)
 
-ANIMATE       = ${VIRTUAL_ENV}/src/animate
-MOVEMENT      = ${VIRTUAL_ENV}/src/movement
-GOALIE        = ${VIRTUAL_ENV}/src/goalie
-UM2N          = ${VIRTUAL_ENV}/src/UM2N
+PKGDIR        = ${HOME}
+ANIMATE       = ${PKGDIR}/animate
+MOVEMENT      = ${PKGDIR}/movement
+GOALIE        = ${PKGDIR}/goalie
+UM2N          = ${PKGDIR}/UM2N
 
 help:
 	@$(SPHINXBUILD) -M help "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)

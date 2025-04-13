@@ -85,7 +85,7 @@ jobs:
           make run_animate_demos
           make run_goalie_demos
           make run_movement_demos
-          make html
+          make html PKGDIR=/home/firedrake
         working-directory: /home/firedrake/output/
         shell: bash
 
