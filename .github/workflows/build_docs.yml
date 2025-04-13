@@ -57,6 +57,8 @@ jobs:
       volumes:
         - ${{ github.workspace }}:/home/firedrake/output
     if: ${{ needs.check_updates.outputs.updates_found == 'true' || github.event_name != 'schedule' }}
+    env:
+      PYTHONPATH: /home/firedrake/firedrake:/home/firedrake/animate:/home/firedrake/goalie:/home/firedrake/movement:/home/firedrake/UM2N:/home/firedrake/.local/lib/python3.12/site-packages
     steps:
       - uses: actions/checkout@v3
         with:
