@@ -9,7 +9,7 @@ As described on the [Firedrake installation page](https://www.firedrakeproject.o
 2. Installing PETSc
 3. Installing Firedrake itself.
 
-To use the mesh adaptation modules, we can install system dependencies (step 1) and Firedrake (step 3) exactly as described, but we must [customise the PETSc installation](https://www.firedrakeproject.org/install.html#id29) (step 2) to install additional packages: chaco, eigen, parmetis, mmg, and parmmg. We do that simply by passing the `--download-<PACKAGE>` flags when running PETSc `configure`:
+To use the mesh adaptation modules, we can install system dependencies (step 1) and Firedrake (step 3) exactly as described, but we must [customise the PETSc installation](https://www.firedrakeproject.org/install.html#id29) (step 2) to install additional packages: Eigen, ParMETIS, MMG, and ParMMG. We do that simply by passing the `--download-<PACKAGE>` flags when running PETSc `configure`:
 ```
 python3 ../firedrake-configure --show-petsc-configure-options | xargs -L1 ./configure --download-chaco --download-eigen --download-parmetis --download-mmg --download-parmmg
 ```
