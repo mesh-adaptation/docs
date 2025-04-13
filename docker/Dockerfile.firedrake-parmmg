@@ -54,11 +54,11 @@ ENV OMPI_ALLOW_RUN_AS_ROOT=1 OMPI_ALLOW_RUN_AS_ROOT_CONFIRM=1
 
 # We set the compiler optimisation flags manually here to remove the default of
 # '-march=native' which is not suitable for Docker images.
-RUN git clone --depth 1 https://github.com/firedrakeproject/petsc.git \
+RUN git clone --depth 1 --branch $(python3 firedrake-configure --show-petsc-version) https://gitlab.com/petsc/petsc.git \
     && cd petsc \
     && python3 /home/firedrake/firedrake-configure --show-petsc-configure-options | \
         sed "s/$/ --COPTFLAGS='-O3 -mtune=generic' --CXXOPTFLAGS='-O3 -mtune=generic' --FOPTFLAGS='-O3 -mtune=generic'/" | \
-        xargs -L1 ./configure --with-make-np=12 --download-chaco --download-eigen --download-parmetis --download-mmg --download-parmmg \
+        xargs -L1 ./configure --with-make-np=4 --download-chaco --download-eigen --download-parmetis --download-mmg --download-parmmg \
     && make \
     && make check \
     && rm -rf ./**/externalpackages \
@@ -85,7 +85,7 @@ USER firedrake
 
 # Install Firedrake
 RUN pip install --verbose --no-binary h5py --src . -e \
-        git+https://github.com/firedrakeproject/firedrake.git#egg=firedrake[test]
+        git+https://github.com/firedrakeproject/firedrake.git#egg=firedrake[check]
 
 # Install Thetis
 RUN pip install --verbose --src . -e git+https://github.com/thetisproject/thetis.git#egg=thetis
