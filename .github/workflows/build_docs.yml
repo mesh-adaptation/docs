@@ -64,6 +64,7 @@ jobs:
 
       - name: Update Animate, Goalie, Movement, and UM2N
         run: |
+          git config --global --add safe.directory '*'
           for REPO in animate goalie movement UM2N; do
             cd /home/firedrake/$REPO
             git pull
