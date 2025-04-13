@@ -64,8 +64,6 @@ jobs:
 
       - name: Update Animate, Goalie, Movement, and UM2N
         run: |
-          . /home/firedrake/firedrake/bin/activate
-          git config --global --add safe.directory '*'
           for REPO in animate goalie movement UM2N; do
             cd /home/firedrake/firedrake/src/$REPO
             git pull
@@ -74,15 +72,12 @@ jobs:
         shell: bash
 
       - name: Install Sphinx and other dependencies
-        run: |
-          . /home/firedrake/firedrake/bin/activate
-          python3 -m pip install -r requirements.txt
+        run: python3 -m pip install -r requirements.txt
         working-directory: /home/firedrake/output/
         shell: bash
 
       - name: Build HTML Documentation
         run: |
-          . /home/firedrake/firedrake/bin/activate
           cd docs
           make run_animate_demos
           make run_goalie_demos
