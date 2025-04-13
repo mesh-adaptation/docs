@@ -1,10 +1,9 @@
 name: 'Test Firedrake Installation'
 
 on:
-  # Trigger when this or any file in the install directory changes
+  # Trigger when this workflow changes in an open PR
   pull_request:
     paths:
-      - 'install/**'
       - '.github/workflows/test_firedrake_install.yml'
 
   # Trigger the workflow on the 1st day of every month at midnight
@@ -26,53 +25,54 @@ jobs:
     container:
       image: ubuntu:24.04
       options: --user root
+    env:
+      OMPI_ALLOW_RUN_AS_ROOT: 1
+      OMPI_ALLOW_RUN_AS_ROOT_CONFIRM: 1
 
     steps:
-      - name: 'Install required packages'
+      - name: Fix HOME
+        # GitHub sets HOME to /github/home (https://github.com/actions/runner/issues/863)
+        run: echo "HOME=/root" >> "$GITHUB_ENV"
+
+      - name: 'Install system dependencies'
         run: |
           apt-get update
           apt-get -y dist-upgrade
-          apt-get install -y --no-install-recommends tzdata curl vim docker.io \
-          openssh-client build-essential autoconf automake cmake gfortran git \
-          libopenblas-serial-dev libtool python3-dev python3-pip python3-tk \
-          python3-venv python3-requests zlib1g-dev libboost-dev sudo gmsh bison flex \
-          ninja-build libocct-ocaf-dev libocct-data-exchange-dev swig graphviz \
-          libcurl4-openssl-dev libxml2-dev
+          apt-get -y install curl python3 python3-pip python3-venv
+          curl -O https://raw.githubusercontent.com/firedrakeproject/firedrake/master/scripts/firedrake-configure
+          apt-get -y install $(python3 firedrake-configure --show-system-packages)
 
-      - name: 'Download necessary files'
+      - name: 'Install PETSc'
         run: |
-          curl -O https://raw.githubusercontent.com/mesh-adaptation/mesh-adaptation-docs/main/install/Makefile
-          curl -O https://raw.githubusercontent.com/mesh-adaptation/mesh-adaptation-docs/main/install/petsc_configure_options.txt
+          git clone --depth 1 --branch $(python3 firedrake-configure --show-petsc-version) https://gitlab.com/petsc/petsc.git
+          cd petsc
+          python3 ../firedrake-configure --show-petsc-configure-options | xargs -L1 ./configure --with-make-np=8 --download-eigen --download-parmetis --download-mmg --download-parmmg
+          make PETSC_DIR=$(pwd) PETSC_ARCH=arch-firedrake-default all
+          make check
 
       - name: 'Install Firedrake'
         run: |
-          yes | make install
-          cd firedrake-*/
-          echo "FIREDRAKE_ENV=$(pwd)" >> $GITHUB_ENV
+          python3 -m venv venv
+          . venv/bin/activate
+          export $(python3 firedrake-configure --show-env)
+          pip cache remove petsc4py
+          pip install --no-binary h5py --src . -e git+https://github.com/firedrakeproject/firedrake.git#egg=firedrake[check]
 
-      - name: 'Upload firedrake-install.log as an artifact'
-        if: ${{ !cancelled() }}
-        uses: actions/upload-artifact@v4
-        with:
-          name: firedrake-install-log
-          path: firedrake-install.log
-          retention-days: 1
-          overwrite: true
-
+      # Do not call `make test` here since we need --use-hwthread-cpus for nprocs=3 tests 
       - name: 'Install and test Animate'
         run: |
-          . $FIREDRAKE_ENV/bin/activate
-          cd $FIREDRAKE_ENV/src
+          . venv/bin/activate
           git clone https://github.com/mesh-adaptation/animate.git
           cd animate
           make install_dev
-          make test
+          python3 -m pytest -v -k "parallel[1] or not parallel" test
+          mpiexec -n 2 python3 -m pytest -v -m parallel[2] test
+          mpiexec -n 3 --use-hwthread-cpus python3 -m pytest -v -m parallel[3] test
 
       - name: 'Install and test Goalie'
         if: ${{ !cancelled() }}
         run: |
-          . $FIREDRAKE_ENV/bin/activate
-          cd $FIREDRAKE_ENV/src
+          . venv/bin/activate
           git clone https://github.com/mesh-adaptation/goalie.git
           cd goalie
           make install_dev
@@ -81,8 +81,7 @@ jobs:
       - name: 'Install and test Movement'
         if: ${{ !cancelled() }}
         run: |
-          . $FIREDRAKE_ENV/bin/activate
-          cd $FIREDRAKE_ENV/src
+          . venv/bin/activate
           git clone https://github.com/mesh-adaptation/movement.git
           cd movement
           make install_dev
