@@ -1,4 +1,4 @@
-# Makefile for building the Sphinx documentation for Animate, Goalie, and Movement
+# Makefile for building the Sphinx documentation for Animate, Goalie, Movement, and UM2N
 
 # You can set these variables from the command line.
 SPHINXOPTS    =
@@ -8,8 +8,9 @@ SPHINXPROJ    = Documentation
 SOURCEDIR     = source
 BUILDDIR      = build
 PYTHON        = $$(which python3)
-
 PKGDIR        = ${HOME}
+
+# Directories where mesh adaptation packages are located
 ANIMATE       = ${PKGDIR}/animate
 MOVEMENT      = ${PKGDIR}/movement
 GOALIE        = ${PKGDIR}/goalie
