@@ -32,7 +32,7 @@ Passing the `--gpus` flag to `docker run` allows us to use GPUs inside container
 docker run -it --gpus all ghcr.io/mesh-adaptation/firedrake-parmmg:latest
 ```
 
-Once inside the container, check that your NVIDIA GPU has been detected by running `nvidia-smi` from the command line. If successful, information about your NVIDIA GPU should be displayed, similarly to this:
+Once inside the container, we should first check that the GPUs have been detected. For NVIDIA GPUs we may do so by running `nvidia-smi` from the command line. If successful, information about your NVIDIA GPUs should be displayed, similarly to this:
 ```
 +-----------------------------------------------------------------------------------------+
 | NVIDIA-SMI 560.35.02              Driver Version: 560.94         CUDA Version: 12.6     |
