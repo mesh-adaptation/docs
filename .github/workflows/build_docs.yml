@@ -68,7 +68,7 @@ jobs:
         run: |
           git config --global --add safe.directory '*'
           for REPO in animate goalie movement UM2N; do
-            cd /home/firedrake/$REPO
+            cd /home/firedrake/${REPO}
             git pull
           done
         working-directory: /home/firedrake/output/
