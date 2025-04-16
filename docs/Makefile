@@ -26,6 +26,7 @@ GENERATED_FILES = source/demos
 run_animate_demos:
 	cd ${ANIMATE}/demos/ && \
 	for FILE in *.py; do \
+		echo "Running Animate demo $$FILE"; \
 		${PYTHON} $$FILE; \
 	done; \
 	cd . \
@@ -35,6 +36,7 @@ run_goalie_demos:
 	cd ${GOALIE}/demos/ && \
 	for FILE in *.py; do \
 		if ! echo "$$SKIP_DEMOS" | grep -wq $$FILE; then \
+			echo "Running Goalie demo $$FILE"; \
 			${PYTHON} $$FILE; \
 		else \
 			echo "Skipping Goalie demo $$FILE"; \
@@ -47,6 +49,7 @@ run_movement_demos:
 	cd ${MOVEMENT}/demos/ && \
 	for FILE in *.py; do \
 		if ! echo "$$SKIP_DEMOS" | grep -wq $$FILE; then \
+			echo "Running Movement demo $$FILE"; \
 			${PYTHON} $$FILE; \
 		else \
 			echo "Skipping Movement demo $$FILE"; \
