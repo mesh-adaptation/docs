@@ -8,7 +8,7 @@ SPHINXPROJ    = Documentation
 SOURCEDIR     = source
 BUILDDIR      = build
 PYTHON        = $$(which python3)
-PKGDIR        = ${HOME}
+PKGDIR        = $$($(PYTHON) -c 'import animate; import os; print(os.path.dirname(os.path.dirname(animate.__path__[0])))' -options_left 0)
 
 # Directories where mesh adaptation packages are located
 ANIMATE       = ${PKGDIR}/animate
