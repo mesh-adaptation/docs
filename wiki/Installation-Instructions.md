@@ -1,51 +1,56 @@
 The following installation instructions assume a Linux or Windows Subsystem for Linux (WSL) operating system.
-The mesh adaptation modules are dependent on a custom setup for Firedrake with PETSc from either a [Makefile](#default-approach) or a [Docker image](#installing-firedrake-via-docker-image).
+The mesh adaptation modules are dependent on a custom setup for Firedrake with PETSc from either a [local installation](#local-firedrake-installation) or a [pre-built Docker image](#installing-firedrake-via-docker-image).
 Once Firedrake is installed (or if you already have a working installation), see the section on [installing Animate, Goalie, or Movement](#installing-animate-goalie-or-movement).
 
-## Installing Firedrake with custom PETSc
+## Local Firedrake installation
 
-Firedrake and PETSc are required by Animate, Goalie, and Movement. Choose from the following installation approaches for these packages.
+As described on the [Firedrake installation page](https://www.firedrakeproject.org/install.html#), a native installation of Firedrake is accomplished in 3 steps:
+1. Installing systems dependencies
+2. Installing PETSc
+3. Installing Firedrake itself.
 
-### Default approach
-
-The first approach uses the default MPI packages found in the path.
-Run the following code to download and install Firedrake and PETSc using the associated Makefile and bespoke PETSc options:
+To use the mesh adaptation modules, we can install system dependencies (step 1) and Firedrake (step 3) exactly as described, but we must [customise the PETSc installation](https://www.firedrakeproject.org/install.html#id29) (step 2) to install additional packages: Eigen, ParMETIS, MMG, and ParMMG. We do that simply by passing the `--download-<PACKAGE>` flags when running PETSc `configure`:
 ```
-curl -O https://raw.githubusercontent.com/mesh-adaptation/mesh-adaptation-docs/main/install/Makefile
-curl -O https://raw.githubusercontent.com/mesh-adaptation/mesh-adaptation-docs/main/install/petsc_configure_options.txt
-make install
-```
-
-The `make install` command accepts several optional arguments:
-* `FIREDRAKE_ENV` for setting the Firedrake virtual environment name. Defaults to `firedrake-mmmyy`, where `mmm` is the first three letters of the current month and `yy` are the last two digits of the current year.
-* `BUILD_DIR` for setting the build directory. Defaults to the current directory.
-* `PETSC_CONFIGURE_FILE` for setting the PETSc configure options. Defaults to `petsc_configure_options.txt`.
-These options may be combined, e.g.:
-```
-make install FIREDRAKE_ENV=firedrake-dev BUILD_DIR=/scratch PETSC_CONFIGURE_FILE=my_configure_file.txt
-```
-
-### Custom MPI approach
-
-The second approach allows customisation of the MPI packages by passing arguments to the associated Makefile. First, download the Makefile and bespoke PETSc options using `curl`:
-```
-curl -O https://raw.githubusercontent.com/mesh-adaptation/mesh-adaptation-docs/main/install/Makefile
-curl -O https://raw.githubusercontent.com/mesh-adaptation/mesh-adaptation-docs/main/install/petsc_configure_options.txt
-```
-When running `make install`, pass arguments for `MPICC`, `MPICXX`, `MPIF90`, and `MPIEXEC`:
-```
-make install MPICC=/path/to/mpicc MPICXX=/path/to/mpicxx MPIF90=/path/to/mpif90 MPIEXEC=/path/to/mpiexec
+python3 ../firedrake-configure --show-petsc-configure-options | xargs -L1 ./configure --download-eigen --download-parmetis --download-mmg --download-parmmg
 ```
 
 ## Docker container approach
 
-A bespoke Firedrake Docker container exists and can be downloaded and installed as an alternative to the above:
+A bespoke Firedrake Docker image exists and can be downloaded and run as an alternative to the above:
 ```
 docker pull ghcr.io/mesh-adaptation/firedrake-parmmg:latest
-docker run --rm -it -v ${HOME}:${HOME} ghcr.io/mesh-adaptation/firedrake-parmmg:latest
+docker run -it ghcr.io/mesh-adaptation/firedrake-parmmg:latest
 ```
 
-NOTE: by installing via a Docker image with ``${HOME}`` you are giving Docker access to your home space.
+For more information on how to run docker containers, see the [official documentation](https://docs.docker.com/engine/containers/run/). For example, since all data inside a container is only accessible from inside the container, it is useful to create [filesystem mounts](https://docs.docker.com/engine/containers/run/#filesystem-mounts) to be able to access data from outside the container.
+
+
+### Using GPUs inside a container
+
+Passing the `--gpus` flag to `docker run` allows us to use GPUs inside containers (see [Docker documentation](https://docs.docker.com/reference/cli/docker/container/run/#gpus) for details). For example, to use all available GPUs, run the following:
+```
+docker run -it --gpus all ghcr.io/mesh-adaptation/firedrake-parmmg:latest
+```
+
+Once inside the container, we should first check that the GPUs have been detected. For NVIDIA GPUs we may do so by running `nvidia-smi` from the command line. If successful, information about your NVIDIA GPUs should be displayed, similarly to this:
+```
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 560.35.02              Driver Version: 560.94         CUDA Version: 12.6     |
+|-----------------------------------------+------------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+|                                         |                        |               MIG M. |
+|=========================================+========================+======================|
+|   0  NVIDIA GeForce RTX 3060 Ti     On  |   00000000:01:00.0  On |                  N/A |
+|  0%   39C    P8             19W /  220W |    1274MiB /   8192MiB |      3%      Default |
+|                                         |                        |                  N/A |
++-----------------------------------------+------------------------+----------------------+
+```
+
+Now you may proceed with installing GPU-supported software as normal. For example, to [install PyTorch](https://pytorch.org/get-started/locally/) with CUDA version 12.6 (as reported by `nvidia-smi` above), we may run:
+```
+pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu126
+```
 
 ## Installing Mesh Adaptation modules
 
@@ -53,7 +58,7 @@ The Mesh Adaptation packages can be installed through the following options, den
 In both cases, make sure that you have activated the Python virtual environment that was created when you installed Firedrake.
 Ensure that you have activated the Python virtual environment associated with your Firedrake installation before following the steps below:
 ```
-source /path/to/firedrake/bin/activate
+source /path/to/venv/bin/activate
 ```
 
 ### Cloning via HTTPS
@@ -76,9 +81,6 @@ make install
 
 It is highly recommended to keep your Firedrake installation and Mesh Adaptation software stack up to date.
 **We recommend updating the full stack at least once every two months.**
-The quickest way to do this is to use the `firedrake-update` command from within an active virtual environment.
-This approach works well when there have been small changes to Firedrake and/or its associated dependencies and add-ons, but sometimes fails when there have been major changes.
-See https://www.firedrakeproject.org/download.html for details on updating Firedrake.
 
-If the `firedrake-update` approach fails then we recommend creating a whole new Firedrake installation using one of the approaches described above.
-Note that the `--venv-name` command line option for the `firedrake-install` script can be useful for differentiating between different builds.
+* To update Firedrake and PETSc, follow the [official Firedrake instructions](https://www.firedrakeproject.org/install.html#updating-firedrake) on how to do so.
+* To update Animate/Goalie/Movement, simply change directory to where each one is located (`cd /path/to/package`) and run `git pull`.
