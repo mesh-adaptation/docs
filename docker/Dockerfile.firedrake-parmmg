@@ -58,7 +58,7 @@ RUN git clone --depth 1 --branch $(python3 firedrake-configure --show-petsc-vers
     && cd petsc \
     && python3 /home/firedrake/firedrake-configure --show-petsc-configure-options | \
         sed "s/$/ --COPTFLAGS='-O3 -mtune=generic' --CXXOPTFLAGS='-O3 -mtune=generic' --FOPTFLAGS='-O3 -mtune=generic'/" | \
-        xargs -L1 ./configure --with-make-np=4 --download-chaco --download-eigen --download-parmetis --download-mmg --download-parmmg \
+        xargs -L1 ./configure --with-make-np=4 --download-eigen --download-parmetis --download-mmg --download-parmmg \
     && make \
     && make check \
     && rm -rf ./**/externalpackages \

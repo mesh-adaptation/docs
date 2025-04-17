@@ -1,4 +1,4 @@
-# Makefile for building the Sphinx documentation for Animate, Goalie, and Movement
+# Makefile for building the Sphinx documentation for Animate, Goalie, Movement, and UM2N
 
 # You can set these variables from the command line.
 SPHINXOPTS    =
@@ -7,12 +7,14 @@ SPHINXAPIDOC  = sphinx-apidoc
 SPHINXPROJ    = Documentation
 SOURCEDIR     = source
 BUILDDIR      = build
-PYTHON        = ${VIRTUAL_ENV}/bin/python3
+PYTHON        = $$(which python3)
+PKGDIR        = $$($(PYTHON) -c 'import animate; import os; print(os.path.dirname(os.path.dirname(animate.__path__[0])))' -options_left 0)
 
-ANIMATE       = ${VIRTUAL_ENV}/src/animate
-MOVEMENT      = ${VIRTUAL_ENV}/src/movement
-GOALIE        = ${VIRTUAL_ENV}/src/goalie
-UM2N          = ${VIRTUAL_ENV}/src/UM2N
+# Directories where mesh adaptation packages are located
+ANIMATE       = ${PKGDIR}/animate
+MOVEMENT      = ${PKGDIR}/movement
+GOALIE        = ${PKGDIR}/goalie
+UM2N          = ${PKGDIR}/UM2N
 
 help:
 	@$(SPHINXBUILD) -M help "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
@@ -24,6 +26,7 @@ GENERATED_FILES = source/demos
 run_animate_demos:
 	cd ${ANIMATE}/demos/ && \
 	for FILE in *.py; do \
+		echo "Running Animate demo $$FILE"; \
 		${PYTHON} $$FILE; \
 	done; \
 	cd . \
@@ -33,6 +36,7 @@ run_goalie_demos:
 	cd ${GOALIE}/demos/ && \
 	for FILE in *.py; do \
 		if ! echo "$$SKIP_DEMOS" | grep -wq $$FILE; then \
+			echo "Running Goalie demo $$FILE"; \
 			${PYTHON} $$FILE; \
 		else \
 			echo "Skipping Goalie demo $$FILE"; \
@@ -45,6 +49,7 @@ run_movement_demos:
 	cd ${MOVEMENT}/demos/ && \
 	for FILE in *.py; do \
 		if ! echo "$$SKIP_DEMOS" | grep -wq $$FILE; then \
+			echo "Running Movement demo $$FILE"; \
 			${PYTHON} $$FILE; \
 		else \
 			echo "Skipping Movement demo $$FILE"; \
