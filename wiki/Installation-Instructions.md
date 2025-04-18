@@ -14,6 +14,15 @@ To use the mesh adaptation modules, we can install system dependencies (step 1) 
 python3 ../firedrake-configure --show-petsc-configure-options | xargs -L1 ./configure --download-eigen --download-parmetis --download-mmg --download-parmmg
 ```
 
+### Reconfiguring an existing installation
+
+If you have previously installed PETSc without the additional mesh adaptation packages listed above, you can install them using PETSc's [reconfigure](https://petsc.org/release/install/multibuild/#reconfigure) script as follows:
+```
+cd $PETSC_DIR
+$PETSC_DIR/$PETSC_ARCH/lib/petsc/conf/reconfigure-$PETSC_ARCH.py --download-eigen --download-parmetis --download-mmg --download-parmmg
+make PETSC_DIR=/opt/petsc PETSC_ARCH=arch-firedrake-default all
+```
+
 ## Docker container approach
 
 A bespoke Firedrake Docker image exists and can be downloaded and run as an alternative to the above:
