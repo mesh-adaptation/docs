@@ -40,7 +40,7 @@ git clone https://github.com/mesh-adaptation/<PACKAGE>.git
 
 Once cloned, the package can be [installed using pip](https://pip.pypa.io/en/stable/topics/local-project-installs/):
 ```
-python3 -m pip install <PACKAGE>
+python3 -m pip install -e <PACKAGE>
 ```
 
 ## Updating
