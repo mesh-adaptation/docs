@@ -27,27 +27,20 @@ make PETSC_DIR=/opt/petsc PETSC_ARCH=arch-firedrake-default all
 
 ## Installing Mesh Adaptation modules
 
-The Mesh Adaptation packages can be installed through the following options, denoting the package of interest by `<PACKAGE>`.
-In both cases, make sure that you have activated the Python virtual environment that was created when you installed Firedrake.
-Ensure that you have activated the Python virtual environment associated with your Firedrake installation before following the steps below:
+The Mesh Adaptation packages Animate, Goalie, and Movement are installed as follows, denoting the package of interest by `<PACKAGE>`.
+First, ensure that you have activated the Python virtual environment associated with your Firedrake installation:
 ```
 source /path/to/venv/bin/activate
 ```
 
-### Cloning via HTTPS
-
+Then clone the `<PACKAGE>` repository using [your preferred method](https://docs.github.com/en/get-started/git-basics/about-remote-repositories). For example, cloning with HTTPS URL is done as follows:
 ```
 git clone https://github.com/mesh-adaptation/<PACKAGE>.git
-cd <PACKAGE>
-make install
 ```
 
-### Cloning via SSH
-
+Once cloned, the package can be [installed using pip](https://pip.pypa.io/en/stable/topics/local-project-installs/):
 ```
-git@github.com:mesh-adaptation/<PACKAGE>.git
-cd <PACKAGE>
-make install
+python3 -m pip install <PACKAGE>
 ```
 
 ## Updating
