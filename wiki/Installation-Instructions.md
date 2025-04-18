@@ -53,7 +53,9 @@ It is highly recommended to keep your Firedrake installation and Mesh Adaptation
 
 ## Docker container approach
 
-A bespoke Firedrake Docker image exists and can be downloaded and run as an alternative to the above:
+We provide a bespoke Docker image with PETSc, Firedrake, Animate, Goalie, and Movement already preinstalled.
+
+The image can be downloaded and run as follows:
 ```
 docker pull ghcr.io/mesh-adaptation/firedrake-parmmg:latest
 docker run -it ghcr.io/mesh-adaptation/firedrake-parmmg:latest
