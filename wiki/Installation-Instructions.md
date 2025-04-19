@@ -22,7 +22,7 @@ If you have previously installed PETSc without the additional mesh adaptation pa
 ```
 cd $PETSC_DIR
 $PETSC_DIR/$PETSC_ARCH/lib/petsc/conf/reconfigure-$PETSC_ARCH.py --download-eigen --download-parmetis --download-mmg --download-parmmg
-make PETSC_DIR=/opt/petsc PETSC_ARCH=arch-firedrake-default all
+make PETSC_DIR=${PETSC_DIR} PETSC_ARCH=${PETSC_ARCH} all
 ```
 
 ## Installing Mesh Adaptation modules
