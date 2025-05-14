@@ -77,7 +77,7 @@ ENV PATH="/home/firedrake/.local/bin:$PATH"
 
 # Hotfix for petsc4py build, see https://gitlab.com/petsc/petsc/-/issues/1759
 RUN echo 'Cython<3.1' > constraints.txt
-ENV PIP_CONSTRAINT=constraints.txt
+ENV PIP_CONSTRAINT=/home/firedrake/constraints.txt
 
 RUN pip cache remove petsc4py
 RUN pip install "$PETSC_DIR"/src/binding/petsc4py
