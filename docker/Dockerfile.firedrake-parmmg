@@ -54,6 +54,8 @@ RUN apt-get update \
 # OpenMPI will complain if mpiexec is invoked as root unless these are set
 ENV OMPI_ALLOW_RUN_AS_ROOT=1 OMPI_ALLOW_RUN_AS_ROOT_CONFIRM=1
 
+USER firedrake
+
 # We set the compiler optimisation flags manually here to remove the default of
 # '-march=native' which is not suitable for Docker images.
 # We use a prerelease version of ptscotch to avoid crashing on fortify source checks
