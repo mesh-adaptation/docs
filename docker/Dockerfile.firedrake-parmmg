@@ -56,11 +56,13 @@ ENV OMPI_ALLOW_RUN_AS_ROOT=1 OMPI_ALLOW_RUN_AS_ROOT_CONFIRM=1
 
 # We set the compiler optimisation flags manually here to remove the default of
 # '-march=native' which is not suitable for Docker images.
+# We use a prerelease version of ptscotch to avoid crashing on fortify source checks
+# see: https://gitlab.com/petsc/petsc/-/issues/1762
 RUN git clone --depth 1 --branch $(python3 firedrake-configure --show-petsc-version) https://gitlab.com/petsc/petsc.git \
     && cd petsc \
     && python3 /home/firedrake/firedrake-configure --show-petsc-configure-options | \
         sed "s/-march=native -mtune=native/-mtune=generic/g" | \
-        xargs -L1 ./configure --with-make-np=4 --download-eigen --download-metis --download-parmetis --download-mmg --download-parmmg \
+        xargs -L1 ./configure --with-make-np=4 --download-eigen --download-metis --download-parmetis --download-mmg --download-parmmg --download-ptscotch=https://joliv.et/scotch_7.0.8alpha1.tar.gz \
     && make \
     && make check \
     && rm -rf ./**/externalpackages \
