@@ -294,6 +294,9 @@ for an equilateral triangular element.
 Operations on metrics
 ---------------------
 
+Metric normalisation
+^^^^^^^^^^^^^^^^^^^^
+
 In order to use metrics to drive mesh adaptation
 algorithms for solving real problems, they must
 first be made relevant to the application. Metrics
