@@ -348,6 +348,9 @@ computes
     \:\mathrm{det}(\mathcal M)^{-\frac1{2p+n}}
     \:\mathcal M.
 
+Combining metrics
+^^^^^^^^^^^^^^^^^
+
 In many cases, it is convenient to be able to combine
 different metrics. For example, if we seek to adapt
 the mesh such that the value of two different error
