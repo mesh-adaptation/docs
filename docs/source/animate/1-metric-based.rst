@@ -2,13 +2,6 @@
 The metric-based framework
 ==========================
 
-The goal-oriented mesh adaptation functionality in Goalie
-is designed such that it is agnostic of the specific method
-used to modify the mesh. However, to give a concrete example,
-this section describes the *metric-based* mesh adaptation
-framework. Integration of this adaptation approach into the
-Firedrake finite element library is currently underway.
-
 Metric spaces
 -------------
 
@@ -106,8 +99,8 @@ volume in Riemannian space. Given a subset
 
 The concept of angle also carries over, amongst other things.
 
-Metric fields should be defined in Firedrake using
-:class:`firedrake.meshadapt.RiemannianMetric`\s from instances of
+Metric fields should be defined in Animate using
+:class:`animate.metric.RiemannianMetric`\s from instances of
 a Lagrange :func:`firedrake.functionspace.TensorFunctionSpace` of
 degree 1, i.e. a tensor space that is piecewise linear and continuous.
 The following example code snippet defines a uniform metric, for example:
@@ -115,8 +108,7 @@ The following example code snippet defines a uniform metric, for example:
 .. code-block:: python
 
    from firedrake import *
-   from firedrake.meshadapt import RiemannianMetric
-   from goalie import *
+   from animate.metric import RiemannianMetric
 
    mesh = UnitSquareMesh(10, 10)
    P1_ten = TensorFunctionSpace(mesh, "CG", 1)
@@ -164,11 +156,11 @@ represented by a unit circle.
    Image taken from :cite:`Wallwork:2021` with author's permission.
 
 Given a metric field, the eigendecomposition may be
-computed in Goalie using the function
-:func:`~.compute_eigendecomposition`. Similarly, given
-:class:`firedrake.function.Function`\s representing the eigenvectors and
-eigenvalues of a metric, it may be assembled using the
-function :func:`~.assemble_eigendecomposition`.
+computed in Animate using the method
+:meth:`animate.metric.RiemannianMetric.compute_eigendecomposition`. Similarly,
+given :class:`firedrake.function.Function`\s representing the eigenvectors and
+eigenvalues of a metric, it may be assembled using the method
+:meth:`animate.metric.RiemannianMetric.assemble_eigendecomposition`.
 
 The orthogonal eigendecomposition gives rise to another
 matrix decomposition, which is useful for understanding
@@ -211,8 +203,8 @@ These are the three aspects of a mesh that metric-based
 mesh adaptation is able to control, whereas other mesh
 adaptation methods can only usually control element sizes.
 
-The metric decomposition above can be computed in Goalie
-using the function :func:`~.density_and_quotients`.
+The metric decomposition above can be computed in Animate using the method
+:meth:`animate.metric.RiemannianMetric.density_and_quotients`.
 
 
 Continuous mesh analogy
@@ -237,8 +229,8 @@ complexity is expressed using the formula
 and can be interpreted as the volume of the spatial
 domain in metric space (recall the formula for
 volume in Riemannian space). Metric complexity may
-be computed in Firedrake using the method
-:meth:`~.complexity`.
+be computed in Animate using the method
+:meth:`animate.metric.RiemannianMetric.complexity`.
 The time-dependent extension of metric complexity,
 
 .. math::
@@ -305,8 +297,8 @@ geometry, dimensional scales and other properties
 of the problem, such as the extent to which it is
 multi-scale.
 
-In Firedrake, normalisation is performed by the
-method :meth:`~.normalise` in the
+In Animate, normalisation is performed by the method
+:meth:`animate.metric.RiemannianMetric.normalise` in the
 :math:`L^p` sense:
 
 .. math::
@@ -339,7 +331,7 @@ formulation also includes integrals in time. Suppose
 :math:`\mathcal T` is the time period of interest,
 :math:`\Delta t>0` is the timestep and
 :math:`\mathcal C_T` is now the target `space-time`
-complexity. Then the function :func:`~.space_time_normalise`
+complexity. Then the Goalie function :func:`goalie.metric.space_time_normalise`
 computes
 
 .. math::
@@ -387,8 +379,8 @@ average in general. See :cite:`Pain:2001` for details.
    in terms of their elliptical representations.
    Image taken from :cite:`Wallwork:2021` with author's permission.
 
-Metric combination may be achieved in Goalie using the
-function :func:`~.combine_metrics`, which defaults to the
+Metric combination may be achieved in Animate using the method
+:meth:`animate.metric.RiemannianMetric.combine_metrics`, which defaults to the
 metric average.
 
 
