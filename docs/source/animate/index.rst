@@ -26,6 +26,7 @@ be searched using the inbuilt :ref:`search engine <search>`.
     :maxdepth: 1
 
     Defining a simple metric and adapting a mesh with respect to it <../demos/simple_metric.py>
+    Metric normalisation <../demos/metric_normalisation.py>
     Combining metrics <../demos/combining_metrics.py>
     Methods for interpolating fields between different meshes <../demos/ping_pong.py>
     Time-dependent mesh adaptation (classical and metric advection algorithms) <../demos/bubble_shear.py>
