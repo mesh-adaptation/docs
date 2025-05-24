@@ -28,4 +28,5 @@ be searched using the inbuilt :ref:`search engine <search>`.
     Defining a simple metric and adapting a mesh with respect to it <../demos/simple_metric.py>
     Combining metrics <../demos/combining_metrics.py>
     Methods for interpolating fields between different meshes <../demos/ping_pong.py>
+    Steady-state mesh adaptation (isotropic vs. anisotropic adaptation) <../demos/poisson.py>
     Time-dependent mesh adaptation (classical and metric advection algorithms) <../demos/bubble_shear.py>
