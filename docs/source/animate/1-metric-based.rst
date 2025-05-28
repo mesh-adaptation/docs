@@ -113,7 +113,7 @@ The following example code snippet defines a uniform metric, for example:
    mesh = UnitSquareMesh(10, 10)
    P1_ten = TensorFunctionSpace(mesh, "CG", 1)
    metric = RiemannianMetric(P1_ten)
-   metric.interpolate(as_matrix([[1, 0], [0, 1]))
+   metric.interpolate(as_matrix([[1, 0], [0, 1]]))
 
 
 Geometric interpretation
