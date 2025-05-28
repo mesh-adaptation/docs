@@ -338,6 +338,10 @@ computes
     \:\mathrm{det}(\mathcal M)^{-\frac1{2p+n}}
     \:\mathcal M.
 
+For an example of how to use this method and visualisations of how different
+normalisation orders affect the adapted meshes, see the `metric normalisation
+demo <../demos/metric_normalisation.py.html>`__.
+
 Combining metrics
 ^^^^^^^^^^^^^^^^^
 
