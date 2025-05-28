@@ -155,13 +155,6 @@ represented by a unit circle.
    Representation of a 2D Riemannian metric as an ellipse.
    Image taken from :cite:`Wallwork:2021` with author's permission.
 
-Given a metric field, the eigendecomposition may be
-computed in Animate using the method
-:meth:`animate.metric.RiemannianMetric.compute_eigendecomposition`. Similarly,
-given :class:`firedrake.function.Function`\s representing the eigenvectors and
-eigenvalues of a metric, it may be assembled using the method
-:meth:`animate.metric.RiemannianMetric.assemble_eigendecomposition`.
-
 The orthogonal eigendecomposition gives rise to another
 matrix decomposition, which is useful for understanding
 metric-based mesh adaptation. If we define `metric density`
