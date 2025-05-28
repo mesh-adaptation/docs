@@ -197,7 +197,9 @@ mesh adaptation is able to control, whereas other mesh
 adaptation methods can only usually control element sizes.
 
 The metric decomposition above can be computed in Animate using the method
-:meth:`animate.metric.RiemannianMetric.density_and_quotients`.
+:meth:`animate.metric.RiemannianMetric.density_and_quotients`. For an example of
+how to use this method and visualisations of its outputs, see the `Poisson demo
+<../demos/poisson.py.html>`__.
 
 
 Continuous mesh analogy
