@@ -380,7 +380,7 @@ average in general. See :cite:`Pain:2001` for details.
    Image taken from :cite:`Wallwork:2021` with author's permission.
 
 Metric combination may be achieved in Animate using the method
-:meth:`animate.metric.RiemannianMetric.combine_metrics`, which defaults to the
+:meth:`animate.metric.RiemannianMetric.combine`, which defaults to the
 metric average.
 
 
