@@ -205,7 +205,7 @@ how to use this method and visualisations of its outputs, see the `Poisson demo
 Continuous mesh analogy
 -----------------------
 
-The work of :cite:`Loseille:2011` established duality between
+The work of :cite:`Loseille:2011a` established duality between
 the (inherently discrete) mesh and a (continuous)
 Riemannian metric field. Having a continuous
 representation for the mesh means that we are able to
@@ -296,7 +296,7 @@ multi-scale.
 
 In Animate, normalisation is performed by the method
 :meth:`animate.metric.RiemannianMetric.normalise` in the
-:math:`L^p` sense:
+:math:`L^p` sense :cite:`Loseille:2011b`
 
 .. math::
     :label: lp_metric
