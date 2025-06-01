@@ -219,7 +219,8 @@ complexity is expressed using the formula
 .. math::
     :label: metric_complexity
 
-    \mathcal C(\mathcal M)=\int_\Omega\sqrt{\mathrm{det}(\mathcal M(\mathbf x)})\;\mathrm dx.
+    \mathcal C(\mathcal M)
+    =\int_\Omega\sqrt{\mathrm{det}(\underline{\mathbf{M}}(\mathbf{x})})\;\mathrm{d}x.
 
 and can be interpreted as the volume of the spatial
 domain in metric space (recall the formula for
@@ -231,7 +232,8 @@ The time-dependent extension of metric complexity,
 .. math::
     :label: space_time_complexity
 
-    \mathcal C(\mathcal M)=\int_{\mathcal T}\int_\Omega\sqrt{\mathrm{det}(\mathcal M(\mathbf x,t)})\;\mathrm dx\;\mathrm dt
+    \mathcal C(\mathcal M)
+    =\int_{\mathcal T}\int_\Omega\sqrt{\mathrm{det}(\underline{\mathbf{M}}(\mathbf{x},t)})\;\mathrm{d}x\;\mathrm{d}t
 
 over a time interval :math:`\mathcal T` is analogous
 to the total number of mesh vertices over all timesteps.
@@ -301,9 +303,9 @@ In Animate, normalisation is performed by the method
 
     \mathcal M_{L^p}:=
     \mathcal C_T^{\frac2n}
-    \:\left(\int_{\Omega}\mathrm{det}(\underline{\mathbf M})^{\frac p{2p+n}}\;\mathrm dx\right)^{-\frac2n}
-    \:\mathrm{det}(\mathcal M)^{-\frac1{2p+n}}
-    \:\mathcal M,
+    \:\left(\int_{\Omega}\mathrm{det}(\underline{\mathbf{M}})^{\frac p{2p+n}}\;\mathrm dx\right)^{-\frac2n}
+    \:\mathrm{det}(\underline{\mathbf{M}})^{-\frac1{2p+n}}
+    \:\underline{\mathbf{M}},
 
 where :math:`\mathcal C_T` is the target metric
 complexity (i.e. tolerated vertex count),
@@ -334,9 +336,9 @@ computes
 
     \mathcal M_{L^p}:=
     \mathcal C_T^{\frac2n}
-    \:\left(\int_{\mathcal T}\frac1{\Delta t}\int_\Omega\mathrm{det}(\underline{\mathbf M})^{\frac p{2p+n}}\;\mathrm dx\;\mathrm dt\right)^{-\frac2n}
-    \:\mathrm{det}(\mathcal M)^{-\frac1{2p+n}}
-    \:\mathcal M.
+    \:\left(\int_{\mathcal T}\frac1{\Delta t}\int_\Omega\mathrm{det}(\underline{\mathbf{M}})^{\frac p{2p+n}}\;\mathrm{d}x\;\mathrm{d}t\right)^{-\frac2n}
+    \:\mathrm{det}(\underline{\mathbf{M}})^{-\frac1{2p+n}}
+    \:\underline{\mathbf{M}}.
 
 For an example of how to use this method and visualisations of how different
 normalisation orders affect the adapted meshes, see the `metric normalisation
