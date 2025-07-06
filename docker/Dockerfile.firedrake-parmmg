@@ -64,7 +64,7 @@ RUN git clone --depth 1 --branch $(python3 firedrake-configure --show-petsc-vers
     && cd petsc \
     && python3 /home/firedrake/firedrake-configure --show-petsc-configure-options | \
         sed "s/-march=native -mtune=native/-mtune=generic/g" | \
-        xargs -L1 ./configure --with-make-np=4 --download-eigen --download-metis --download-parmetis --download-mmg --download-parmmg --download-ptscotch=https://joliv.et/scotch_7.0.8alpha1.tar.gz \
+        xargs -L1 ./configure --with-make-np=4 --download-eigen --download-metis --download-parmetis --download-mmg --download-parmmg --download-ptscotch \
     && make \
     && make check \
     && rm -rf ./**/externalpackages \
