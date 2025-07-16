@@ -42,6 +42,9 @@ jobs:
           curl -O https://raw.githubusercontent.com/firedrakeproject/firedrake/master/scripts/firedrake-configure
           apt-get -y install $(python3 firedrake-configure --show-system-packages)
 
+      - name: Setup tmate session
+        uses: mxschmitt/action-tmate@v3
+
       - name: 'Install PETSc'
         run: |
           git clone --depth 1 --branch $(python3 firedrake-configure --show-petsc-version) https://gitlab.com/petsc/petsc.git
