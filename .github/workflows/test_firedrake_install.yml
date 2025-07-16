@@ -46,7 +46,7 @@ jobs:
         run: |
           git clone --depth 1 --branch $(python3 firedrake-configure --show-petsc-version) https://gitlab.com/petsc/petsc.git
           cd petsc
-          python3 ../firedrake-configure --show-petsc-configure-options | xargs -L1 ./configure --with-make-np=8 --download-eigen --download-parmetis --download-mmg --download-parmmg
+          python3 ../firedrake-configure --show-petsc-configure-options | xargs -L1 ./configure --with-make-np=8 --download-eigen --download-ptscotch --download-mmg --download-parmmg
           make PETSC_DIR=$(pwd) PETSC_ARCH=arch-firedrake-default all
           make check
 
