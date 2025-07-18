@@ -54,9 +54,12 @@ jobs:
         run: |
           python3 -m venv venv
           . venv/bin/activate
+          git clone https://github.com/firedrakeproject/firedrake.git
           export $(python3 firedrake-configure --show-env)
           pip cache remove petsc4py
-          pip install --no-binary h5py --src . -e git+https://github.com/firedrakeproject/firedrake.git#egg=firedrake[check]
+          pip install $PETSC_DIR/src/binding/petsc4py
+          pip install -r ./firedrake/requirements-build.txt
+          pip install --no-build-isolation --no-binary h5py --editable './firedrake[check]'
 
       # Do not call `make test` here since we need --use-hwthread-cpus for nprocs=3 tests 
       - name: 'Install and test Animate'
