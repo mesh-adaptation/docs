@@ -12,10 +12,19 @@ on:
         required: true
         type: string
 
+permissions: {}
+
+concurrency:
+  group: 'docker_build-${{ github.ref }}'
+  cancel-in-progress: true
+
 jobs:
   docker:
     name: 'Build and push Docker container'
     runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
 
     steps:
       - name: 'Check out the repo'

@@ -1,7 +1,12 @@
 name: 'Reusable Citation Check'
 
-on:
-  workflow_call:
+on: workflow_call
+
+permissions: {}
+
+concurrency:
+  group: 'citation_check-${{ github.ref }}'
+  cancel-in-progress: true
 
 jobs:
   citation_check:

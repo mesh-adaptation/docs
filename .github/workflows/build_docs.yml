@@ -16,6 +16,8 @@ on:
   schedule:
     - cron: '0 0 * * *'
 
+permissions: {}
+
 concurrency:
   group: 'build_docs-${{ github.ref }}'
   cancel-in-progress: true

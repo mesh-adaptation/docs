@@ -10,6 +10,12 @@ on:
       - '.github/workflows/*.yml'
   workflow_dispatch:
 
+permissions: {}
+
+concurrency:
+  group: 'linting-${{ github.ref }}'
+  cancel-in-progress: true
+
 jobs:
   linting:
     runs-on: ubuntu-latest

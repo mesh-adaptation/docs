@@ -7,8 +7,10 @@ on:
       - 'wiki/**'
       - '.github/workflows/publish-wiki.yml'
 
+permissions: {}
+
 concurrency:
-  group: publish-wiki
+  group: 'publish-wiki-${{ github.ref }}'
   cancel-in-progress: true
 
 jobs:
