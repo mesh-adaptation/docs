@@ -27,11 +27,18 @@ on:
 
 permissions: {}
 
+concurrency:
+  group: 'docker_build-${{ github.ref }}'
+  cancel-in-progress: true
+
 jobs:
   docker:
     name: 'Build and push Docker container'
     runs-on: ubuntu-latest
     timeout-minutes: 90
+    permissions:
+      pages: write
+      id-token: write
 
     steps:
       - name: 'Check out Dockerfile'
