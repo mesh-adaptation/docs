@@ -33,5 +33,6 @@ jobs:
   docker:
     uses: ./.github/workflows/reusable_docker_build.yml
     with:
-      dockerfile-path: 'docker/Dockerfile.firedrake-parmmg'
+      dockerfile-repo: 'firedrakeproject/firedrake'
+      dockerfile-path: 'docker/Dockerfile.vanilla'
       docker-image-tag: 'ghcr.io/mesh-adaptation/firedrake-parmmg:latest'
