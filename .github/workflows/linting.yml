@@ -19,6 +19,7 @@ concurrency:
 jobs:
   linting:
     runs-on: ubuntu-latest
+    timeout-minutes: 5
     strategy:
       fail-fast: false
 
@@ -42,6 +43,7 @@ jobs:
   zizmor:
     name: zizmor
     runs-on: ubuntu-latest
+    timeout-minutes: 5
     permissions:
       security-events: write
     steps:

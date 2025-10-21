@@ -12,6 +12,7 @@ on:
       - 'docs/**'
       - '.github/workflows/build_docs.yml'
   workflow_dispatch:
+
   # Every night at midnight build docs if Animate, Goalie, Movement, or UM2N have been updated in the last 24h
   schedule:
     - cron: '0 0 * * *'
@@ -23,10 +24,12 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+
   # Check if there have been commits on the main branch of other repos in the last 24h
   check_updates:
     name: Check for updates in Animate, Goalie, Movement, and UM2N
     runs-on: ubuntu-latest
+    timeout-minutes: 5
     outputs:
       updates_found: ${{ steps.check_repos.outputs.updates_found }}
     steps:
@@ -52,6 +55,7 @@ jobs:
   build_docs:
     name: Build Mesh Adaptation Documentation
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     needs: check_updates
     container:
       image: ghcr.io/mesh-adaptation/firedrake-um2n:latest
@@ -101,6 +105,8 @@ jobs:
 
   deploy:
     name: Deploy to GitHub Pages
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
     needs: build_docs
     if: ${{ github.ref == 'refs/heads/main' }}
     permissions:
@@ -109,7 +115,6 @@ jobs:
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: ubuntu-latest
     steps:
       - name: Deploy to GitHub Pages
         id: deployment

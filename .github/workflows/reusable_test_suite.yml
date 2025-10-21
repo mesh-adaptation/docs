@@ -20,6 +20,7 @@ jobs:
   test_suite:
     name: 'Test suite'
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     container:
       image: ghcr.io/mesh-adaptation/${{ inputs.docker-image }}:latest
       options: --user root
