@@ -1,16 +1,17 @@
-name: Build and Deploy Documentation
+name: Build and deploy documentation
 
 on:
   push:
-    branches:
-      - main
+    branches: main
     paths:
       - 'docs/**'
       - '.github/workflows/build_docs.yml'
+
   pull_request:
     paths:
       - 'docs/**'
       - '.github/workflows/build_docs.yml'
+
   workflow_dispatch:
 
   # Every night at midnight build docs if Animate, Goalie, Movement, or UM2N have been updated in the last 24h
@@ -27,7 +28,6 @@ jobs:
 
   # Check if there have been commits on the main branch of other repos in the last 24h
   check_updates:
-    name: Check for updates in Animate, Goalie, Movement, and UM2N
     runs-on: ubuntu-latest
     timeout-minutes: 5
     outputs:
@@ -53,7 +53,6 @@ jobs:
           done
 
   build_docs:
-    name: Build Mesh Adaptation Documentation
     runs-on: ubuntu-latest
     timeout-minutes: 15
     needs: check_updates
@@ -104,7 +103,6 @@ jobs:
           path: /home/firedrake/output/docs/build/html
 
   deploy:
-    name: Deploy to GitHub Pages
     runs-on: ubuntu-latest
     timeout-minutes: 5
     needs: build_docs

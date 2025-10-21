@@ -1,4 +1,4 @@
-name: 'Reusable Citation Check'
+name: Reusable citation check
 
 on: workflow_call
 
@@ -10,27 +10,22 @@ concurrency:
 
 jobs:
   citation_check:
-    name: 'Check Citation'
     runs-on: ubuntu-latest
     timeout-minutes: 5
 
     steps:
-      - name: 'Check out the repo'
+      - name: Checkout the repo
         uses: actions/checkout@v4
         with:
           persist-credentials: false
 
-      - name: 'Setup Python'
+      - name: Setup Python
         uses: actions/setup-python@v2
         with:
           python-version: '3.12'
 
-      - name: 'Install cffconvert'
-        run: |
-          pip install cffconvert
+      - name: Install cffconvert
+        run: pip install cffconvert
 
-      - name: 'Check citation formatting'
-        run: |
-          echo "Checking CITATION.cff formatting..."
-          cffconvert --validate
-          echo "PASS"
+      - name: Check citation formatting
+        run: cffconvert --validate
