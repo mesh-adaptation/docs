@@ -1,6 +1,12 @@
-name: 'Build bespoke UM2N Docker container'
+name: 'Build Firedrake Docker container with (par)mmg'
 
 on:
+  # Rebuild whenever the parmmg container is (includes weekend schedule)
+  workflow_run:
+    workflows: ['Build Firedrake Docker container with (par)mmg']
+    types:
+      - completed
+
   # Check that Docker build succeeds when these files get changed in an open PR
   pull_request:
     paths:
@@ -15,31 +21,17 @@ on:
       - '.github/workflows/docker_firedrake-um2n.yml'
       - 'docker/Dockerfile.firedrake-um2n'
 
-  # Trigger this workflow when docker_firedrake-parmmg.yml completes on the main branch
-  workflow_run:  # zizmor: ignore[dangerous-triggers]
-    workflows:
-      - 'Build bespoke Firedrake Docker container'
-    types:
-      - completed
-    branches:
-      - main
-
-  # Manually trigger the workflow
-  workflow_dispatch:
-
 permissions: {}
 
 # Stop the workflow if a new run is requested
 concurrency:
-  group: 'docker_firedrake-um2n-${{ github.ref }}'
+  group: $${{ github.workflow }}-${{ github.ref }}'
   cancel-in-progress: true
 
 jobs:
   docker:
-    if: |
-      github.event_name != 'workflow_run' || 
-      github.event.workflow_run.head_repository.owner.login == github.event.workflow_run.repository.owner.login
     uses: ./.github/workflows/reusable_docker_build.yml
     with:
+      # use Dockerfile.vanilla from firedrake to build base container
       dockerfile-path: 'docker/Dockerfile.firedrake-um2n'
       docker-image-tag: 'ghcr.io/mesh-adaptation/firedrake-um2n:latest'
