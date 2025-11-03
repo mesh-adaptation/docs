@@ -1,4 +1,4 @@
-name: 'Build Firedrake Docker container with (par)mmg'
+name: 'Build Firedrake Docker container for UM2N'
 
 on:
   # Rebuild whenever the parmmg container is (includes weekend schedule)
