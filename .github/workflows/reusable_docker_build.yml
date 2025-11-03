@@ -19,10 +19,6 @@ on:
 
 permissions: {}
 
-concurrency:
-  group: 'docker_build-${{ github.ref }}'
-  cancel-in-progress: true
-
 jobs:
   docker:
     name: 'Build and push Docker container'
