@@ -1,17 +1,12 @@
 name: 'Build Firedrake Docker container with (par)mmg'
 
 on:
-  # Rebuild whenever the base container is (includes weekend schedule)
-  workflow_run:
-    workflows: ['Build Firedrake base Docker container with (par)mmg']
-    types:
-      - completed
-
   # Check that Docker build succeeds when these files get changed in an open PR
   pull_request:
     paths:
       - '.github/workflows/docker_firedrake-parmmg.yml'
       - 'docker/Dockerfile.firedrake-parmmg'
+      - 'docker/Dockerfile.firedrake-um2n'
 
   # Build and push the Docker container when these files get changed on the main branch
   push:
@@ -20,6 +15,7 @@ on:
     paths:
       - '.github/workflows/docker_firedrake-parmmg.yml'
       - 'docker/Dockerfile.firedrake-parmmg'
+      - 'docker/Dockerfile.firedrake-um2n'
 
 permissions: {}
 
@@ -29,9 +25,26 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  docker:
+  docker_base:
     uses: ./.github/workflows/reusable_docker_build.yml
+    with:
+      # use Dockerfile.vanilla from firedrake to build base container
+      dockerfile-repo: 'firedrakeproject/firedrake'
+      dockerfile-path: 'docker/Dockerfile.vanilla'
+      docker-image-tag: 'ghcr.io/mesh-adaptation/firedrake-parmmg-base:latest'
+
+  docker_parmmg:
+    uses: ./.github/workflows/reusable_docker_build.yml
+    needs: docker_base
     with:
       # use Dockerfile.vanilla from firedrake to build base container
       dockerfile-path: 'docker/Dockerfile.firedrake-parmmg'
       docker-image-tag: 'ghcr.io/mesh-adaptation/firedrake-parmmg:latest'
+
+  docker_um2n:
+    uses: ./.github/workflows/reusable_docker_build.yml
+    needs: docker_parmmg
+    with:
+      # use Dockerfile.vanilla from firedrake to build base container
+      dockerfile-path: 'docker/Dockerfile.firedrake-um2n'
+      docker-image-tag: 'ghcr.io/mesh-adaptation/firedrake-um2n:latest'
