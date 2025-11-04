@@ -27,6 +27,8 @@ on:
   # Manually trigger the workflow
   workflow_dispatch:
 
+permissions: {}
+
 # Stop the workflow if a new run is requested
 concurrency:
   group: 'docker_firedrake-um2n-${{ github.ref }}'
