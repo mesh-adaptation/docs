@@ -32,6 +32,7 @@ jobs:
       dockerfile-repo: 'firedrakeproject/firedrake'
       dockerfile-path: 'docker/Dockerfile.vanilla'
       docker-image-tag: 'ghcr.io/mesh-adaptation/firedrake-parmmg-base:latest'
+      save-docker-image-artifact: 'firedrake-parmmg-base'
 
   docker_parmmg:
     uses: ./.github/workflows/reusable_docker_build.yml
@@ -40,6 +41,8 @@ jobs:
       # use Dockerfile.vanilla from firedrake to build base container
       dockerfile-path: 'docker/Dockerfile.firedrake-parmmg'
       docker-image-tag: 'ghcr.io/mesh-adaptation/firedrake-parmmg:latest'
+      load-docker-image-artifact: 'firedrake-parmmg-base'
+      save-docker-image-artifact: 'firedrake-parmmg'
 
   docker_um2n:
     uses: ./.github/workflows/reusable_docker_build.yml
@@ -48,3 +51,4 @@ jobs:
       # use Dockerfile.vanilla from firedrake to build base container
       dockerfile-path: 'docker/Dockerfile.firedrake-um2n'
       docker-image-tag: 'ghcr.io/mesh-adaptation/firedrake-um2n:latest'
+      load-docker-image-artifact: 'firedrake-parmmg'
