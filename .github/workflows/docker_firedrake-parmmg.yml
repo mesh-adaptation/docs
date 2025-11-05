@@ -5,6 +5,7 @@ on:
   pull_request:
     paths:
       - '.github/workflows/docker_firedrake-parmmg.yml'
+      - '.github/workflows/reusable_test_suite.yml'
       - 'docker/Dockerfile.firedrake-parmmg'
       - 'docker/Dockerfile.firedrake-um2n'
 
@@ -14,6 +15,7 @@ on:
       - main
     paths:
       - '.github/workflows/docker_firedrake-parmmg.yml'
+      - '.github/workflows/reusable_test_suite.yml'
       - 'docker/Dockerfile.firedrake-parmmg'
       - 'docker/Dockerfile.firedrake-um2n'
 

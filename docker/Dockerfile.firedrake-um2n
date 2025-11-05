@@ -1,7 +1,10 @@
-# Dockerfile for installing Firedrake plus UM2N and its dependencies with CPU support
+# Dockerfile for installing Firedrake plus UM2N and its dependencies
+# including torch with CPU support
 
 # Based on firedrake
 FROM ghcr.io/mesh-adaptation/firedrake-parmmg:latest
+
+WORKDIR /root
 
 RUN apt-get update && apt-get install -y \
     libglu1 \

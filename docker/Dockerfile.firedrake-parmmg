@@ -1,4 +1,8 @@
+# Dockerfile that provides firedrake built with (par)mmg support
+# and with the main mesh-adaptation packages installed in /root
 FROM ghcr.io/mesh-adaptation/firedrake-parmmg-base:latest
+
+WORKDIR /root
 
 # Install Thetis
 RUN pip install --verbose --src . -e git+https://github.com/thetisproject/thetis.git#egg=thetis
