@@ -53,7 +53,7 @@ jobs:
       - name: 'Load previously built Docker image'
         if: ${{ inputs.load-docker-image-artifact != null }}
         run: |
-          if [[ ! "${{ inputs.save-docker-image-artifact }}" =~ ^firedrake-[a-z-]{1,11}$ ]]; then
+          if [[ ! "${{ inputs.load-docker-image-artifact }}" =~ ^firedrake-[a-z-]{1,11}$ ]]; then
             echo "Invalid input for load-docker-image-artifact"
             exit 1
           fi
@@ -95,7 +95,7 @@ jobs:
         if: ${{ inputs.save-docker-image-artifact != null }}
         run: |
           if [[ ! "${{ inputs.save-docker-image-artifact }}" =~ ^firedrake-[a-z-]{1,11}$ ]]; then
-            echo "Invalid input for load-docker-image-artifact"
+            echo "Invalid input for save-docker-image-artifact"
             exit 1
           fi
           mkdir -p images
