@@ -37,7 +37,8 @@ jobs:
   docker_base:
     uses: ./.github/workflows/reusable_docker_build.yml
     with:
-      # use Dockerfile.vanilla from firedrake to build base container
+      # use Dockerfile.vanilla from firedrake to build firedrake-parmmg-base image
+      # which contains a build of petsc+firedrake with (Par)Mmg libraries included
       dockerfile-repo: 'firedrakeproject/firedrake'
       dockerfile-path: 'docker/Dockerfile.vanilla'
       docker-image-tag: 'ghcr.io/mesh-adaptation/firedrake-parmmg-base:latest'
@@ -47,7 +48,8 @@ jobs:
     uses: ./.github/workflows/reusable_docker_build.yml
     needs: docker_base
     with:
-      # use Dockerfile.vanilla from firedrake to build base container
+      # starting from firedrake-parmmg-base, build firedrake-parmmg image
+      # which includes Animate, Movement, Goalie, and Thetis packages
       dockerfile-path: 'docker/Dockerfile.firedrake-parmmg'
       docker-image-tag: 'ghcr.io/mesh-adaptation/firedrake-parmmg:latest'
       load-docker-image-artifact: 'firedrake-parmmg-base'
@@ -57,7 +59,8 @@ jobs:
     uses: ./.github/workflows/reusable_docker_build.yml
     needs: docker_parmmg
     with:
-      # use Dockerfile.vanilla from firedrake to build base container
+      # starting from firedrake-parmmg build firedrake-um2n image
+      # which adds UM2N and it dependencies including PyTorch(CPU)
       dockerfile-path: 'docker/Dockerfile.firedrake-um2n'
       docker-image-tag: 'ghcr.io/mesh-adaptation/firedrake-um2n:latest'
       load-docker-image-artifact: 'firedrake-parmmg'
