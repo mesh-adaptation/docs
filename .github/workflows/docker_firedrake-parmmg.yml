@@ -1,4 +1,4 @@
-name: 'Build Firedrake Docker container with (par)mmg'
+name: 'Build Firedrake Docker container with (Par)Mmg'
 
 on:
   # Check that Docker build succeeds when these files get changed in an open PR
