@@ -1,5 +1,5 @@
 # Dockerfile for installing Firedrake plus UM2N and its dependencies
-# including torch with CPU support
+# including PyTorch with CPU support
 
 # Based on firedrake
 FROM ghcr.io/mesh-adaptation/firedrake-parmmg:latest
