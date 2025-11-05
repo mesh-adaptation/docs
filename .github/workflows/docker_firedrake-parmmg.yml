@@ -19,6 +19,13 @@ on:
       - 'docker/Dockerfile.firedrake-parmmg'
       - 'docker/Dockerfile.firedrake-um2n'
 
+   # Build and push the Docker containers every Saturday at 12AM
+  schedule:
+    - cron: '0 0 * * 6'
+
+  # Manually trigger the workflow
+  workflow_dispatch:
+
 permissions: {}
 
 # Stop the workflow if a new run is requested
