@@ -37,6 +37,7 @@ jobs:
       - name: 'Check out Dockerfile'
         uses: actions/checkout@v4
         with:
+          persist-credentials: false
           repository: ${{ inputs.dockerfile-repo }}
           sparse-checkout: ${{ inputs.dockerfile-path }}
           sparse-checkout-cone-mode: false
@@ -52,8 +53,12 @@ jobs:
       - name: 'Load previously built Docker image'
         if: ${{ inputs.load-docker-image-artifact != null }}
         run: |
-          docker image load -i images/${{ inputs.load-docker-image-artifact }}.tar
-          echo ${{ inputs.load-docker-image-artifact }}.tar > .dockerignore
+          if [[ ! "${{ inputs.save-docker-image-artifact }}" =~ ^firedrake-[a-z-]{1,11}$ ]]; then
+            echo "Invalid input for load-docker-image-artifact"
+            exit 1
+          fi
+          docker image load -i "images/${{ inputs.load-docker-image-artifact }}.tar"
+          echo "${{ inputs.load-docker-image-artifact }}.tar" > .dockerignore
 
       - name: 'Set up Docker buildx'
         uses: docker/setup-buildx-action@e468171a9de216ec08956ac3ada2f0791b6bd435  # v3
@@ -89,8 +94,12 @@ jobs:
       - name: 'Save Docker image'
         if: ${{ inputs.save-docker-image-artifact != null }}
         run: |
+          if [[ ! "${{ inputs.save-docker-image-artifact }}" =~ ^firedrake-[a-z-]{1,11}$ ]]; then
+            echo "Invalid input for load-docker-image-artifact"
+            exit 1
+          fi
           mkdir -p images
-          docker image save -o images/${{ inputs.save-docker-image-artifact }}.tar ${{ inputs.docker-image-tag }}
+          docker image save -o "images/${{ inputs.save-docker-image-artifact }}.tar" ${{ inputs.docker-image-tag }}
 
       - name: 'Upload saved Docker image as artifact'
         if: ${{ inputs.save-docker-image-artifact != null }}
