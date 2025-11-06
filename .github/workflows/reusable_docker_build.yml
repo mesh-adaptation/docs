@@ -32,9 +32,6 @@ jobs:
     name: Build and push Docker container
     runs-on: ubuntu-latest
     timeout-minutes: 90
-    permissions:
-      contents: read
-      packages: write
 
     steps:
       - name: Checkout Dockerfile
@@ -74,6 +71,7 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
+          secrets: inherit
           logout: true
 
       - name: Show available images
