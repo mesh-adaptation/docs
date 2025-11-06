@@ -37,6 +37,9 @@ concurrency:
 
 jobs:
   docker_base:
+    permissions:
+      contents: read
+      packages: write
     uses: ./.github/workflows/reusable_docker_build.yml
     with:
       # use Dockerfile.vanilla from firedrake to build firedrake-parmmg-base image
@@ -47,6 +50,9 @@ jobs:
       save-docker-image-artifact: 'firedrake-parmmg-base'
 
   docker_parmmg:
+    permissions:
+      contents: read
+      packages: write
     uses: ./.github/workflows/reusable_docker_build.yml
     needs: docker_base
     with:
@@ -58,6 +64,9 @@ jobs:
       save-docker-image-artifact: 'firedrake-parmmg'
 
   docker_um2n:
+    permissions:
+      contents: read
+      packages: write
     uses: ./.github/workflows/reusable_docker_build.yml
     needs: docker_parmmg
     with:
