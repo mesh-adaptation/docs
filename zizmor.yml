@@ -4,5 +4,10 @@ rules:
       # Ignore template injection in cases where we manually check inputs
       - reusable_docker_build.yml:56
       - reusable_docker_build.yml:60
-      - reusable_docker_build.yml:97
-      - reusable_docker_build.yml:102
+      - reusable_docker_build.yml:104
+      - reusable_docker_build.yml:109
+  unpinned-images:
+    ignore:
+      # Ignore unpinned images for trusted Docker images
+      - build_docs.yml:60
+      - reusable_test_suite.yml:24
