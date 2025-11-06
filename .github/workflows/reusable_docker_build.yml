@@ -27,22 +27,15 @@ on:
 
 permissions: {}
 
-concurrency:
-  group: 'docker_build-${{ github.ref }}'
-  cancel-in-progress: true
-
 jobs:
   docker:
     name: Build and push Docker container
     runs-on: ubuntu-latest
     timeout-minutes: 90
-    permissions:
-      contents: read
-      packages: write
 
     steps:
-      - name: Checkout the repo
-        uses: actions/checkout@v4
+      - name: Checkout Dockerfile
+        uses: actions/checkout@v5
         with:
           persist-credentials: false
           repository: ${{ inputs.dockerfile-repo }}
