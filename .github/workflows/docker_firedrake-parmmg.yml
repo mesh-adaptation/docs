@@ -38,7 +38,6 @@ concurrency:
 jobs:
   docker_base:
     permissions:
-      contents: read
       packages: write
     uses: ./.github/workflows/reusable_docker_build.yml
     with:
@@ -51,7 +50,6 @@ jobs:
 
   docker_parmmg:
     permissions:
-      contents: read
       packages: write
     uses: ./.github/workflows/reusable_docker_build.yml
     needs: docker_base
@@ -65,7 +63,6 @@ jobs:
 
   docker_um2n:
     permissions:
-      contents: read
       packages: write
     uses: ./.github/workflows/reusable_docker_build.yml
     needs: docker_parmmg

@@ -32,6 +32,8 @@ jobs:
     name: Build and push Docker container
     runs-on: ubuntu-latest
     timeout-minutes: 90
+    permissions:
+      packages: write
 
     steps:
       - name: Checkout Dockerfile
