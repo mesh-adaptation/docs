@@ -14,18 +14,14 @@ jobs:
     timeout-minutes: 5
 
     steps:
-      - name: Checkout the repo
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           persist-credentials: false
 
-      - name: Setup Python
-        uses: actions/setup-python@v2
+      - uses: actions/setup-python@v2
         with:
           python-version: '3.12'
 
-      - name: Install cffconvert
-        run: pip install cffconvert
+      - run: pip install cffconvert
 
-      - name: Check citation formatting
-        run: cffconvert --validate
+      - run: cffconvert --validate

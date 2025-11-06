@@ -9,7 +9,6 @@ on:
         default: 'firedrake-parmmg'
         type: string
 
-# Cancel jobs running if new commits are pushed
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
@@ -31,17 +30,14 @@ jobs:
       PYTHONPATH: /home/firedrake/firedrake:/home/firedrake/animate:/home/firedrake/goalie:/home/firedrake/movement:/home/firedrake/UM2N:/home/firedrake/.local/lib/python3.12/site-packages
 
     steps:
-      - name: Checkout the repo
-        id: checkout
-        uses: actions/checkout@v4
+      - id: checkout
+        uses: actions/checkout@v5
         with:
           persist-credentials: false
 
-      - name: Install package
-        run: pip install -e .[dev]
+      - run: pip install -e .[dev]
 
-      - name: Lint
-        run: make lint
+      - run: make lint
 
       - name: Run serial tests
         run: |

@@ -10,4 +10,4 @@ rules:
     ignore:
       # Ignore unpinned images for trusted Docker images
       - build_docs.yml:60
-      - reusable_test_suite.yml:24
+      - reusable_test_suite.yml:23

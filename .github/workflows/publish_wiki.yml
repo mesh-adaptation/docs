@@ -20,7 +20,7 @@ jobs:
     permissions:
       contents: write
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           persist-credentials: false
       - uses: Andrew-Chen-Wang/github-wiki-action@6448478bd55f1f3f752c93af8ac03207eccc3213  # v5

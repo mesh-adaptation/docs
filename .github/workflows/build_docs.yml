@@ -68,7 +68,7 @@ jobs:
           PYTHONVERSION=$(python3 -c "import sys; print('.'.join(sys.version.split('.')[:2]))")
           echo "PYTHONPATH=/home/firedrake/firedrake:/home/firedrake/animate:/home/firedrake/goalie:/home/firedrake/movement:/home/firedrake/UM2N:/home/firedrake/.local/lib/python${PYTHONVERSION}/site-packages" >> $GITHUB_ENV
 
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v5
         with:
           persist-credentials: false
 
