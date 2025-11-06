@@ -1,10 +1,10 @@
-# Dockerfile for installing Firedrake plus UM2N and its dependencies with CPU support
+# Dockerfile for installing Firedrake plus UM2N and its dependencies
+# including PyTorch with CPU support
 
 # Based on firedrake
 FROM ghcr.io/mesh-adaptation/firedrake-parmmg:latest
 
-# Ensure we are root when installing system dependencies
-USER root
+WORKDIR /root
 
 RUN apt-get update && apt-get install -y \
     libglu1 \
@@ -21,9 +21,6 @@ RUN apt-get update && apt-get install -y \
     mesa-utils \
     libglx-mesa0 \
     && rm -rf /var/lib/apt/lists/*
-
-USER firedrake
-WORKDIR /home/firedrake
 
 RUN pip3 install torch --index-url https://download.pytorch.org/whl/cpu && \
     git clone https://github.com/mesh-adaptation/UM2N.git && \
