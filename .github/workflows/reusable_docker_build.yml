@@ -83,7 +83,7 @@ jobs:
         uses: docker/build-push-action@263435318d21b8e681c14492fe198d362a7d2c83  # v6
         with:
           context: .
-          push: true
+          push: ${{ github.ref == 'refs/heads/main' }}
           load: true
           no-cache: true
           file: ${{ inputs.dockerfile-path }}
