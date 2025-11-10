@@ -89,6 +89,7 @@ jobs:
 
       - name: Build HTML Documentation
         run: |
+          set -e
           cd docs
           make run_animate_demos
           make run_goalie_demos
