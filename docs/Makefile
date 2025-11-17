@@ -28,8 +28,7 @@ run_animate_demos:
 	for FILE in *.py; do \
 		echo "Running Animate demo $$FILE"; \
 		${PYTHON} $$FILE; \
-	done; \
-	cd . \
+	done
 
 run_goalie_demos:
 	SKIP_DEMOS="time_partition.py gray_scott.py gray_scott_split.py"; \
@@ -41,8 +40,7 @@ run_goalie_demos:
 		else \
 			echo "Skipping Goalie demo $$FILE"; \
 		fi; \
-	done; \
-	cd . \
+	done
 
 run_movement_demos:
 	SKIP_DEMOS="monge_ampere_3d.py"; \
@@ -54,8 +52,7 @@ run_movement_demos:
 		else \
 			echo "Skipping Movement demo $$FILE"; \
 		fi; \
-	done; \
-	cd . \
+	done
 
 source/demos: copy_demos
 
