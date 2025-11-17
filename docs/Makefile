@@ -24,6 +24,7 @@ help:
 GENERATED_FILES = source/demos
 
 run_animate_demos:
+	set -e && \
 	cd ${ANIMATE}/demos/ && \
 	for FILE in *.py; do \
 		echo "Running Animate demo $$FILE"; \
@@ -31,6 +32,7 @@ run_animate_demos:
 	done
 
 run_goalie_demos:
+	set -e && \
 	SKIP_DEMOS="time_partition.py gray_scott.py gray_scott_split.py"; \
 	cd ${GOALIE}/demos/ && \
 	for FILE in *.py; do \
@@ -43,6 +45,7 @@ run_goalie_demos:
 	done
 
 run_movement_demos:
+	set -e && \
 	SKIP_DEMOS="monge_ampere_3d.py"; \
 	cd ${MOVEMENT}/demos/ && \
 	for FILE in *.py; do \
