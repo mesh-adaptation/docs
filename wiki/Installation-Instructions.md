@@ -27,11 +27,15 @@ make PETSC_DIR=${PETSC_DIR} PETSC_ARCH=${PETSC_ARCH} all
 
 ## Installing Mesh Adaptation modules
 
-The Mesh Adaptation packages Animate, Goalie, and Movement are installed as follows, denoting the package of interest by `<PACKAGE>`.
 First, ensure that you have activated the Python virtual environment associated with your Firedrake installation:
 ```
 source /path/to/venv/bin/activate
 ```
+
+Next, install the `adapt_common` package, which provides common functionality
+for the other Mesh Adaptation packages.
+This and the other Mesh Adaptation packages - Animate, Goalie, and Movement -
+are installed as follows, denoting the package of interest by `<PACKAGE>`.
 
 Then clone the `<PACKAGE>` repository using [your preferred method](https://docs.github.com/en/get-started/git-basics/about-remote-repositories). For example, cloning with HTTPS URL is done as follows:
 ```
