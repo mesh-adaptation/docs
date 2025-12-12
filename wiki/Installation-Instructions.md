@@ -38,7 +38,14 @@ Then clone the `<PACKAGE>` repository using [your preferred method](https://docs
 git clone https://github.com/mesh-adaptation/<PACKAGE>.git
 ```
 
-Once cloned, the package can be [installed using pip](https://pip.pypa.io/en/stable/topics/local-project-installs/):
+Once cloned, the package submodules must be initialised and updated:
+```
+cd <PACKAGE>
+git submodule init
+git submodule update
+```
+
+The package can be [installed using pip](https://pip.pypa.io/en/stable/topics/local-project-installs/):
 ```
 python3 -m pip install -e <PACKAGE>
 ```
