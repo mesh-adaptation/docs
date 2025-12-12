@@ -43,6 +43,7 @@ jobs:
           git config --global --add safe.directory /__w/UM2N/UM2N
           git submodule init
           git submodule update
+          pip uninstall ${REPO_NAME} -y || true
           pip install -e .[dev]
 
       - run: make lint
