@@ -54,7 +54,7 @@ jobs:
 
   build_docs:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 30
     needs: check_updates
     container:
       image: ghcr.io/mesh-adaptation/firedrake-um2n:latest
