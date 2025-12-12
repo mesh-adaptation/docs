@@ -35,7 +35,11 @@ jobs:
         with:
           persist-credentials: false
 
-      - run: pip install -e .[dev]
+      - name: Configure submodules and install the package
+        run: |
+          git submodule init
+          git submodule update
+          pip install -e .[dev]
 
       - run: make lint
 
