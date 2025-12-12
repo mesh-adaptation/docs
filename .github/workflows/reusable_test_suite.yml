@@ -35,6 +35,12 @@ jobs:
         with:
           persist-credentials: false
 
+      - name: Install adapt_common
+        run: |
+          cd ..
+          git clone https://github.com/mesh-adaptation/adapt_common.git
+          pip install -e ./adapt_common[dev]
+
       - run: pip install -e .[dev]
 
       - run: make lint
