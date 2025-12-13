@@ -60,7 +60,7 @@ jobs:
             exit 1
           fi
           docker image load -i "images/${{ inputs.load-docker-image-artifact }}.tar"
-          echo "${{ inputs.load-docker-image-artifact }}.tar" > .dockerignore
+          rm  "images/${{ inputs.load-docker-image-artifact }}.tar"
 
       - name: Set up Docker buildx
         uses: docker/setup-buildx-action@e468171a9de216ec08956ac3ada2f0791b6bd435  # v3
@@ -96,6 +96,12 @@ jobs:
       - name: Save Docker image
         if: ${{ inputs.save-docker-image-artifact != null }}
         run: |
+          if [[ ! "${{ inputs.save-docker-image-artifact }}" == firedrake-parmmg-base ]]; then
+            docker rmi ghcr.io/mesh-adaptation/firedrake-parmmg-base:latest
+          fi
+          docker ps -a
+          docker images
+          df -h
           if [[ ! "${{ inputs.save-docker-image-artifact }}" =~ ^firedrake-[a-z-]{1,11}$ ]]; then
             echo "Invalid input for save-docker-image-artifact"
             exit 1
