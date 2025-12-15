@@ -60,7 +60,7 @@ jobs:
             exit 1
           fi
           docker image load -i "images/${{ inputs.load-docker-image-artifact }}.tar"
-          rm "${{ inputs.load-docker-image-artifact }}.tar"
+          rm "images/${{ inputs.load-docker-image-artifact }}.tar"
 
       - name: Set up Docker buildx
         uses: docker/setup-buildx-action@e468171a9de216ec08956ac3ada2f0791b6bd435  # v3
