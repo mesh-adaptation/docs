@@ -54,19 +54,19 @@ jobs:
 
   build_docs:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 30
     needs: check_updates
     container:
       image: ghcr.io/mesh-adaptation/firedrake-um2n:latest
       options: --user root
       volumes:
-        - ${{ github.workspace }}:/home/firedrake/output
+        - ${{ github.workspace }}:/root/output
     if: ${{ needs.check_updates.outputs.updates_found == 'true' || github.event_name != 'schedule' }}
     steps:
       - name: Export PYTHONPATH
         run: |
           PYTHONVERSION=$(python3 -c "import sys; print('.'.join(sys.version.split('.')[:2]))")
-          echo "PYTHONPATH=/home/firedrake/firedrake:/home/firedrake/animate:/home/firedrake/goalie:/home/firedrake/movement:/home/firedrake/UM2N:/home/firedrake/.local/lib/python${PYTHONVERSION}/site-packages" >> $GITHUB_ENV
+          echo "PYTHONPATH=/opt/firedrake:/root/animate:/root/goalie:/root/movement:/root/um2n:/root/.local/lib/python${PYTHONVERSION}/site-packages" >> $GITHUB_ENV
 
       - uses: actions/checkout@v5
         with:
@@ -76,31 +76,32 @@ jobs:
         run: |
           git config --global --add safe.directory '*'
           for REPO in animate goalie movement UM2N; do
-            cd /home/firedrake/${REPO}
+            cd /root/${REPO}
             git pull
           done
-        working-directory: /home/firedrake/output/
+        working-directory: /root/output/
         shell: bash
 
       - name: Install Sphinx and other dependencies
         run: python3 -m pip install -r requirements.txt
-        working-directory: /home/firedrake/output/
+        working-directory: /root/output/
         shell: bash
 
       - name: Build HTML Documentation
         run: |
+          set -e
           cd docs
           make run_animate_demos
           make run_goalie_demos
           make run_movement_demos
           make html
-        working-directory: /home/firedrake/output/
+        working-directory: /root/output/
         shell: bash
 
       - name: Upload Artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: /home/firedrake/output/docs/build/html
+          path: /root/output/docs/build/html
 
   deploy:
     runs-on: ubuntu-latest

@@ -24,14 +24,15 @@ help:
 GENERATED_FILES = source/demos
 
 run_animate_demos:
+	set -e && \
 	cd ${ANIMATE}/demos/ && \
 	for FILE in *.py; do \
 		echo "Running Animate demo $$FILE"; \
 		${PYTHON} $$FILE; \
-	done; \
-	cd . \
+	done
 
 run_goalie_demos:
+	set -e && \
 	SKIP_DEMOS="time_partition.py gray_scott.py gray_scott_split.py"; \
 	cd ${GOALIE}/demos/ && \
 	for FILE in *.py; do \
@@ -41,10 +42,10 @@ run_goalie_demos:
 		else \
 			echo "Skipping Goalie demo $$FILE"; \
 		fi; \
-	done; \
-	cd . \
+	done
 
 run_movement_demos:
+	set -e && \
 	SKIP_DEMOS="monge_ampere_3d.py"; \
 	cd ${MOVEMENT}/demos/ && \
 	for FILE in *.py; do \
@@ -54,8 +55,7 @@ run_movement_demos:
 		else \
 			echo "Skipping Movement demo $$FILE"; \
 		fi; \
-	done; \
-	cd . \
+	done
 
 source/demos: copy_demos
 
