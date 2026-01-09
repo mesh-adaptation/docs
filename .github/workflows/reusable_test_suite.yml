@@ -37,6 +37,7 @@ jobs:
 
       - name: Configure submodules and install the package
         run: |
+          git config --global --add safe.directory /__w/adapt_common/adapt_common
           git config --global --add safe.directory /__w/animate/animate
           git config --global --add safe.directory /__w/goalie/goalie
           git config --global --add safe.directory /__w/movement/movement
