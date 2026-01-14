@@ -12,6 +12,8 @@ RUN git clone https://github.com/mesh-adaptation/adapt_common.git && \
     git clone https://github.com/mesh-adaptation/animate.git && \
     git clone https://github.com/mesh-adaptation/movement.git && \
     git clone https://github.com/mesh-adaptation/goalie.git && \
+    cd animate && git submodule init && git submodule update && cd .. && \
+    cd movement && git submodule init && git submodule update && cd .. && \
     pip install -e adapt_common[dev] && \
     pip install -e animate[dev] && \
     pip install -e movement[dev] && \
