@@ -11,7 +11,7 @@ on:
       dockerfile-branch:
         description: 'Branch of repo containing Dockerfile'
         required: false
-        default: $${{ github.head_ref }}
+        default: ${{ github.head_ref }}
         type: string
       dockerfile-path:
         description: 'Path to the Dockerfile to be built'
@@ -46,7 +46,7 @@ jobs:
         with:
           persist-credentials: false
           repository: ${{ inputs.dockerfile-repo }}
-          ref: $${{ inputs.dockerfile-branch }}
+          ref: ${{ inputs.dockerfile-branch }}
           sparse-checkout: ${{ inputs.dockerfile-path }}
           sparse-checkout-cone-mode: false
           path: .
