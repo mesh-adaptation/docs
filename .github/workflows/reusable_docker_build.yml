@@ -11,7 +11,7 @@ on:
       dockerfile-branch:
         description: 'Branch of repo containing Dockerfile'
         required: false
-        default: $${{ github.head }}
+        default: $${{ github.head_ref }}
         type: string
       dockerfile-path:
         description: 'Path to the Dockerfile to be built'
