@@ -1,12 +1,11 @@
-name: Build Firedrake Docker container with (Par)Mmg
+name: Build Firedrake Docker container with (Par)Mmg (main)
 
 on:
   # Check that Docker build succeeds when these files get changed in an open PR
   pull_request:
     paths:
       - '.github/workflows/reusable_docker_build.yml'
-      - '.github/workflows/docker_firedrake-parmmg.yml'
-      - '.github/workflows/reusable_test_suite.yml'
+      - '.github/workflows/docker_firedrake-parmmg_main.yml'
       - 'docker/Dockerfile.firedrake-parmmg'
       - 'docker/Dockerfile.firedrake-um2n'
 
@@ -16,8 +15,7 @@ on:
       - main
     paths:
       - '.github/workflows/reusable_docker_build.yml'
-      - '.github/workflows/docker_firedrake-parmmg.yml'
-      - '.github/workflows/reusable_test_suite.yml'
+      - '.github/workflows/docker_firedrake-parmmg_main.yml'
       - 'docker/Dockerfile.firedrake-parmmg'
       - 'docker/Dockerfile.firedrake-um2n'
 
@@ -47,6 +45,7 @@ jobs:
       dockerfile-path: 'docker/Dockerfile.vanilla'
       docker-image-tag: 'ghcr.io/mesh-adaptation/firedrake-parmmg-base:latest'
       save-docker-image-artifact: 'firedrake-parmmg-base'
+      firedrake-branch: 'main'
 
   docker_parmmg:
     permissions:
@@ -60,6 +59,7 @@ jobs:
       docker-image-tag: 'ghcr.io/mesh-adaptation/firedrake-parmmg:latest'
       load-docker-image-artifact: 'firedrake-parmmg-base'
       save-docker-image-artifact: 'firedrake-parmmg'
+      firedrake-branch: 'main'
 
   docker_um2n:
     permissions:
@@ -72,3 +72,4 @@ jobs:
       dockerfile-path: 'docker/Dockerfile.firedrake-um2n'
       docker-image-tag: 'ghcr.io/mesh-adaptation/firedrake-um2n:latest'
       load-docker-image-artifact: 'firedrake-parmmg'
+      firedrake-branch: 'main'
