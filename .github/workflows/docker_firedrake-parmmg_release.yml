@@ -42,10 +42,9 @@ jobs:
       # use Dockerfile.vanilla from firedrake to build firedrake-parmmg-base image
       # which contains a build of petsc+firedrake with (Par)Mmg libraries included
       dockerfile-repo: 'firedrakeproject/firedrake'
-      dockerfile-path: 'docker/Dockerfile.vanilla'
+      dockerfile-branch: 'release'
       docker-image-tag: 'ghcr.io/mesh-adaptation/firedrake-parmmg-base-release:latest'
       save-docker-image-artifact: 'firedrake-parmmg-base-release'
-      firedrake-branch: 'release'
 
   docker_parmmg:
     permissions:
@@ -58,4 +57,3 @@ jobs:
       dockerfile-path: 'docker/Dockerfile.firedrake-parmmg'
       docker-image-tag: 'ghcr.io/mesh-adaptation/firedrake-parmmg-release:latest'
       load-docker-image-artifact: 'firedrake-parmmg-base-release'
-      firedrake-branch: 'release'

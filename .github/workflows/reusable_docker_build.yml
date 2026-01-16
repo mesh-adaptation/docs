@@ -8,6 +8,11 @@ on:
         default: ${{ github.repository }}
         required: false
         type: string
+      dockerfile-branch:
+        description: 'Branch of repo containing Dockerfile'
+        required: false
+        default: $${{ github.head }}
+        type: string
       dockerfile-path:
         description: 'Path to the Dockerfile to be built'
         required: true
@@ -23,10 +28,6 @@ on:
       load-docker-image-artifact:
         description: 'Before the build, load this image as artifact'
         required: false
-        type: string
-      firedrake-branch:
-        description: 'Firedrake branch to build'
-        required: true
         type: string
 
 permissions: {}
@@ -45,6 +46,7 @@ jobs:
         with:
           persist-credentials: false
           repository: ${{ inputs.dockerfile-repo }}
+          ref: $${{ inputs.dockerfile-branch }}
           sparse-checkout: ${{ inputs.dockerfile-path }}
           sparse-checkout-cone-mode: false
           path: .
@@ -92,9 +94,11 @@ jobs:
           no-cache: true
           file: ${{ inputs.dockerfile-path }}
           tags: ${{ inputs.docker-image-tag }}
+          # build-args are only used by firedrake's Dockerfile.vanilla
+          # in which case the branch to build is the same as the Dockerfile is from
           build-args: |
             ARCH=default
-            BRANCH=${{ inputs.firedrake-branch }}
+            BRANCH=${{ inputs.dockerfile-branch }}
             PETSC_EXTRA_ARGS=--download-eigen --download-metis --download-parmetis --download-mmg --download-parmmg --download-ptscotch
 
       - name: Save Docker image
