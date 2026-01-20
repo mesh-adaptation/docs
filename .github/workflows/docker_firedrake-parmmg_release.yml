@@ -44,7 +44,7 @@ jobs:
       dockerfile-repo: 'firedrakeproject/firedrake'
       dockerfile-path: 'docker/Dockerfile.vanilla'
       dockerfile-branch: 'release'
-      docker-image-tag: 'ghcr.io/mesh-adaptation/firedrake-parmmg-base-release:latest'
+      docker-image-tag: 'ghcr.io/mesh-adaptation/firedrake-parmmg-base:release'
       save-docker-image-artifact: 'firedrake-parmmg-base-release'
 
   docker_parmmg:
@@ -57,5 +57,5 @@ jobs:
       # which includes Animate, Movement, Goalie, and Thetis packages
       dockerfile-path: 'docker/Dockerfile.firedrake-parmmg'
       dockerfile-branch: 'release'
-      docker-image-tag: 'ghcr.io/mesh-adaptation/firedrake-parmmg-release:latest'
+      docker-image-tag: 'ghcr.io/mesh-adaptation/firedrake-parmmg:release'
       load-docker-image-artifact: 'firedrake-parmmg-base-release'
