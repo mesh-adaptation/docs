@@ -56,5 +56,6 @@ jobs:
       # starting from firedrake-parmmg-base, build firedrake-parmmg image
       # which includes Animate, Movement, Goalie, and Thetis packages
       dockerfile-path: 'docker/Dockerfile.firedrake-parmmg'
+      dockerfile-branch: 'release'
       docker-image-tag: 'ghcr.io/mesh-adaptation/firedrake-parmmg-release:latest'
       load-docker-image-artifact: 'firedrake-parmmg-base-release'
