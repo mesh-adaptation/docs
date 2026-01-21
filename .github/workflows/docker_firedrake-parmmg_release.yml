@@ -1,12 +1,11 @@
-name: Build Firedrake Docker container with (Par)Mmg
+name: Build Firedrake Docker container with (Par)Mmg (release)
 
 on:
   # Check that Docker build succeeds when these files get changed in an open PR
   pull_request:
     paths:
       - '.github/workflows/reusable_docker_build.yml'
-      - '.github/workflows/docker_firedrake-parmmg.yml'
-      - '.github/workflows/reusable_test_suite.yml'
+      - '.github/workflows/docker_firedrake-parmmg_release.yml'
       - 'docker/Dockerfile.firedrake-parmmg'
       - 'docker/Dockerfile.firedrake-um2n'
 
@@ -16,14 +15,13 @@ on:
       - main
     paths:
       - '.github/workflows/reusable_docker_build.yml'
-      - '.github/workflows/docker_firedrake-parmmg.yml'
-      - '.github/workflows/reusable_test_suite.yml'
+      - '.github/workflows/docker_firedrake-parmmg_release.yml'
       - 'docker/Dockerfile.firedrake-parmmg'
       - 'docker/Dockerfile.firedrake-um2n'
 
-   # Build and push the Docker containers every Saturday at 12AM
+  # Run test suite at 1AM on the first of the month
   schedule:
-    - cron: '0 0 * * 6'
+    - cron: '0 1 1 * *'
 
   # Manually trigger the workflow
   workflow_dispatch:
@@ -41,12 +39,14 @@ jobs:
       packages: write
     uses: ./.github/workflows/reusable_docker_build.yml
     with:
-      # use Dockerfile.vanilla from firedrake to build firedrake-parmmg-base image
-      # which contains a build of petsc+firedrake with (Par)Mmg libraries included
+      # use Dockerfile.vanilla from Firedrake to build firedrake-parmmg-base image
+      # which contains a build of PETSc+Firedrake with (Par)Mmg libraries included
       dockerfile-repo: 'firedrakeproject/firedrake'
       dockerfile-path: 'docker/Dockerfile.vanilla'
-      docker-image-tag: 'ghcr.io/mesh-adaptation/firedrake-parmmg-base:latest'
-      save-docker-image-artifact: 'firedrake-parmmg-base'
+      dockerfile-branch: 'release'
+      firedrake-branch: 'release'
+      docker-image-tag: 'ghcr.io/mesh-adaptation/firedrake-parmmg-base:release'
+      save-docker-image-artifact: 'firedrake-parmmg-base-release'
 
   docker_parmmg:
     permissions:
@@ -57,18 +57,6 @@ jobs:
       # starting from firedrake-parmmg-base, build firedrake-parmmg image
       # which includes Animate, Movement, Goalie, and Thetis packages
       dockerfile-path: 'docker/Dockerfile.firedrake-parmmg'
-      docker-image-tag: 'ghcr.io/mesh-adaptation/firedrake-parmmg:latest'
-      load-docker-image-artifact: 'firedrake-parmmg-base'
-      save-docker-image-artifact: 'firedrake-parmmg'
-
-  docker_um2n:
-    permissions:
-      packages: write
-    uses: ./.github/workflows/reusable_docker_build.yml
-    needs: docker_parmmg
-    with:
-      # starting from firedrake-parmmg build firedrake-um2n image
-      # which adds UM2N and it dependencies including PyTorch(CPU)
-      dockerfile-path: 'docker/Dockerfile.firedrake-um2n'
-      docker-image-tag: 'ghcr.io/mesh-adaptation/firedrake-um2n:latest'
-      load-docker-image-artifact: 'firedrake-parmmg'
+      firedrake-branch: 'release'
+      docker-image-tag: 'ghcr.io/mesh-adaptation/firedrake-parmmg:release'
+      load-docker-image-artifact: 'firedrake-parmmg-base-release'

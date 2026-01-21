@@ -6,7 +6,7 @@ on:
       docker-image:
         description: 'Name of the Firedrake Docker image to use'
         required: false
-        default: 'firedrake-parmmg'
+        default: 'firedrake-parmmg:latest'
         type: string
 
 concurrency:
@@ -20,7 +20,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 20
     container:
-      image: ghcr.io/mesh-adaptation/${{ inputs.docker-image }}:latest
+      image: ghcr.io/mesh-adaptation/${{ inputs.docker-image }}
       options: --user root
     env:
       # Name of the repository that triggered the workflow
