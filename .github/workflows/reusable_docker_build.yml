@@ -13,6 +13,11 @@ on:
         required: false
         default: ${{ github.head_ref }}
         type: string
+      firedrake-branch:
+        description: 'Branch to pass as the BRANCH build argument when building the Docker container'
+        required: false
+        default: ${{ github.head_ref }}
+        type: string
       dockerfile-path:
         description: 'Path to the Dockerfile to be built'
         required: true
@@ -94,11 +99,11 @@ jobs:
           no-cache: true
           file: ${{ inputs.dockerfile-path }}
           tags: ${{ inputs.docker-image-tag }}
-          # build-args are only used by firedrake's Dockerfile.vanilla
+          # Build arguments are only used by Firedrake's Dockerfile.vanilla,
           # in which case the branch to build is the same as the Dockerfile is from
           build-args: |
             ARCH=default
-            BRANCH=${{ inputs.dockerfile-branch }}
+            BRANCH=${{ inputs.firedrake-branch }}
             PETSC_EXTRA_ARGS=--download-eigen --download-metis --download-parmetis --download-mmg --download-parmmg --download-ptscotch
 
       - name: Save Docker image
