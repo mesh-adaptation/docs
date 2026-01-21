@@ -5,8 +5,8 @@ rules:
       - reusable_docker_build.yml:69
       - reusable_docker_build.yml:73
       - reusable_docker_build.yml:74
-      - reusable_docker_build.yml:112
-      - reusable_docker_build.yml:117
+      - reusable_docker_build.yml:110
+      - reusable_docker_build.yml:115
   unpinned-images:
     ignore:
       # Ignore unpinned images for trusted Docker images
