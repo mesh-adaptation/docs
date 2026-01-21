@@ -99,8 +99,6 @@ jobs:
           no-cache: true
           file: ${{ inputs.dockerfile-path }}
           tags: ${{ inputs.docker-image-tag }}
-          # Build arguments are only used by Firedrake's Dockerfile.vanilla,
-          # in which case the branch to build is the same as the Dockerfile is from
           build-args: |
             ARCH=default
             BRANCH=${{ inputs.firedrake-branch }}
