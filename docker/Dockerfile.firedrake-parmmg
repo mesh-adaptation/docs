@@ -7,6 +7,9 @@ ARG BRANCH="main"
 
 WORKDIR /root
 
+# Ensure /github/home/.cache/pip is editable by the user
+RUN mkdir -p /github/home/.cache/pip && chmod -R 777 /github/home/.cache/pip
+
 # Install Thetis
 RUN pip install --verbose --src . -e git+https://github.com/thetisproject/thetis.git#egg=thetis
 
