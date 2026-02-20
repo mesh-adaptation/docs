@@ -4,7 +4,7 @@ PACKAGE		?=
 OPTIONS		?=
 NAMESPACE	= ghcr.io/mesh-adaptation
 IMAGE		= $(PACKAGE)
-TAG			= latest
+TAG			?=
 USERNAME	?=
 TOKEN		?=
 
