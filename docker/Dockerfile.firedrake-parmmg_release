@@ -1,0 +1,26 @@
+# Dockerfile that provides Firedrake release built with (Par)Mmg support
+# and with the main mesh-adaptation packages installed in /root
+FROM ghcr.io/mesh-adaptation/firedrake-parmmg-base:release
+
+# Which branch is to be used across all repositories?
+ARG BRANCH="main"
+
+WORKDIR /root
+
+# Install Thetis
+RUN pip install --verbose --src . -e git+https://github.com/thetisproject/thetis.git#egg=thetis
+
+# Install adapt_common, Animate, Movement, Goalie and their dependencies
+RUN git clone https://github.com/mesh-adaptation/adapt_common.git && \
+    git clone https://github.com/mesh-adaptation/animate.git && \
+    git clone https://github.com/mesh-adaptation/movement.git && \
+    git clone https://github.com/mesh-adaptation/goalie.git && \
+    cd animate && git checkout ${BRANCH} && cd .. && \
+    cd movement && git checkout ${BRANCH} && cd .. && \
+    cd goalie && git checkout ${BRANCH} && cd .. && \
+    cd animate && git submodule init && git submodule update && cd .. && \
+    cd movement && git submodule init && git submodule update && cd .. && \
+    pip install -e adapt_common[dev] && \
+    pip install -e animate[dev] && \
+    pip install -e movement[dev] && \
+    pip install -e goalie[dev]
