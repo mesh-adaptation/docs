@@ -1,0 +1,62 @@
+name: Build Firedrake Docker container with (Par)Mmg (release)
+
+on:
+  # Check that Docker build succeeds when these files get changed in an open PR
+  pull_request:
+    paths:
+      - '.github/workflows/reusable_docker_build.yml'
+      - '.github/workflows/docker_firedrake-parmmg_release.yml'
+      - 'docker/Dockerfile.firedrake-parmmg'
+      - 'docker/Dockerfile.firedrake-um2n'
+
+  # Build and push the Docker container when these files get changed on the main branch
+  push:
+    branches:
+      - main
+    paths:
+      - '.github/workflows/reusable_docker_build.yml'
+      - '.github/workflows/docker_firedrake-parmmg_release.yml'
+      - 'docker/Dockerfile.firedrake-parmmg'
+      - 'docker/Dockerfile.firedrake-um2n'
+
+  # Run test suite at 1AM on the first of the month
+  schedule:
+    - cron: '0 1 1 * *'
+
+  # Manually trigger the workflow
+  workflow_dispatch:
+
+permissions: {}
+
+# Stop the workflow if a new run is requested
+concurrency:
+  group: $${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  docker_base:
+    permissions:
+      packages: write
+    uses: ./.github/workflows/reusable_docker_build.yml
+    with:
+      # use Dockerfile.vanilla from Firedrake to build firedrake-parmmg-base image
+      # which contains a build of PETSc+Firedrake with (Par)Mmg libraries included
+      dockerfile-repo: 'firedrakeproject/firedrake'
+      dockerfile-path: 'docker/Dockerfile.vanilla'
+      dockerfile-branch: 'release'
+      firedrake-branch: 'release'
+      docker-image-tag: 'ghcr.io/mesh-adaptation/firedrake-parmmg-base:release'
+      save-docker-image-artifact: 'firedrake-parmmg-base-release'
+
+  docker_parmmg:
+    permissions:
+      packages: write
+    uses: ./.github/workflows/reusable_docker_build.yml
+    needs: docker_base
+    with:
+      # starting from firedrake-parmmg-base, build firedrake-parmmg image
+      # which includes Animate, Movement, Goalie, and Thetis packages
+      dockerfile-path: 'docker/Dockerfile.firedrake-parmmg_release'
+      firedrake-branch: 'release'
+      docker-image-tag: 'ghcr.io/mesh-adaptation/firedrake-parmmg:release'
+      load-docker-image-artifact: 'firedrake-parmmg-base-release'

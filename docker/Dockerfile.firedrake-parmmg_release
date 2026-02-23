@@ -1,6 +1,6 @@
-# Dockerfile that provides Firedrake built with (Par)Mmg support
+# Dockerfile that provides Firedrake release built with (Par)Mmg support
 # and with the main mesh-adaptation packages installed in /root
-FROM ghcr.io/mesh-adaptation/firedrake-parmmg-base:latest
+FROM ghcr.io/mesh-adaptation/firedrake-parmmg-base:release
 
 # Which branch is to be used across all repositories?
 ARG BRANCH="main"

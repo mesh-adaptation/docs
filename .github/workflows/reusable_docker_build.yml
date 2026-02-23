@@ -8,6 +8,16 @@ on:
         default: ${{ github.repository }}
         required: false
         type: string
+      dockerfile-branch:
+        description: 'Branch of repo containing Dockerfile'
+        required: false
+        default: ${{ github.head_ref }}
+        type: string
+      firedrake-branch:
+        description: 'Branch to pass as the BRANCH build argument when building the Docker container'
+        required: false
+        default: ${{ github.head_ref }}
+        type: string
       dockerfile-path:
         description: 'Path to the Dockerfile to be built'
         required: true
@@ -41,6 +51,7 @@ jobs:
         with:
           persist-credentials: false
           repository: ${{ inputs.dockerfile-repo }}
+          ref: ${{ inputs.dockerfile-branch }}
           sparse-checkout: ${{ inputs.dockerfile-path }}
           sparse-checkout-cone-mode: false
           path: .
@@ -55,7 +66,7 @@ jobs:
       - name: Load previously built Docker image
         if: ${{ inputs.load-docker-image-artifact != null }}
         run: |
-          if [[ ! "${{ inputs.load-docker-image-artifact }}" =~ ^firedrake-[a-z-]{1,11}$ ]]; then
+          if [[ ! "${{ inputs.load-docker-image-artifact }}" =~ ^firedrake-[a-z-]{1,19}$ ]]; then
             echo "Invalid input for load-docker-image-artifact"
             exit 1
           fi
@@ -90,13 +101,13 @@ jobs:
           tags: ${{ inputs.docker-image-tag }}
           build-args: |
             ARCH=default
-            BRANCH=main
+            BRANCH=${{ inputs.firedrake-branch }}
             PETSC_EXTRA_ARGS=--download-eigen --download-metis --download-parmetis --download-mmg --download-parmmg --download-ptscotch
 
       - name: Save Docker image
         if: ${{ inputs.save-docker-image-artifact != null }}
         run: |
-          if [[ ! "${{ inputs.save-docker-image-artifact }}" =~ ^firedrake-[a-z-]{1,11}$ ]]; then
+          if [[ ! "${{ inputs.save-docker-image-artifact }}" =~ ^firedrake-[a-z-]{1,19}$ ]]; then
             echo "Invalid input for save-docker-image-artifact"
             exit 1
           fi

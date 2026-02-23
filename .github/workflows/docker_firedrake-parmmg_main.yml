@@ -1,12 +1,11 @@
-name: Build Firedrake Docker container with (Par)Mmg
+name: Build Firedrake Docker container with (Par)Mmg (main)
 
 on:
   # Check that Docker build succeeds when these files get changed in an open PR
   pull_request:
     paths:
       - '.github/workflows/reusable_docker_build.yml'
-      - '.github/workflows/docker_firedrake-parmmg.yml'
-      - '.github/workflows/reusable_test_suite.yml'
+      - '.github/workflows/docker_firedrake-parmmg_main.yml'
       - 'docker/Dockerfile.firedrake-parmmg'
       - 'docker/Dockerfile.firedrake-um2n'
 
@@ -16,8 +15,7 @@ on:
       - main
     paths:
       - '.github/workflows/reusable_docker_build.yml'
-      - '.github/workflows/docker_firedrake-parmmg.yml'
-      - '.github/workflows/reusable_test_suite.yml'
+      - '.github/workflows/docker_firedrake-parmmg_main.yml'
       - 'docker/Dockerfile.firedrake-parmmg'
       - 'docker/Dockerfile.firedrake-um2n'
 
@@ -41,10 +39,12 @@ jobs:
       packages: write
     uses: ./.github/workflows/reusable_docker_build.yml
     with:
-      # use Dockerfile.vanilla from firedrake to build firedrake-parmmg-base image
-      # which contains a build of petsc+firedrake with (Par)Mmg libraries included
+      # use Dockerfile.vanilla from Firedrake to build firedrake-parmmg-base image
+      # which contains a build of PETSc+Firedrake with (Par)Mmg libraries included
       dockerfile-repo: 'firedrakeproject/firedrake'
       dockerfile-path: 'docker/Dockerfile.vanilla'
+      dockerfile-branch: 'main'
+      firedrake-branch: 'main'
       docker-image-tag: 'ghcr.io/mesh-adaptation/firedrake-parmmg-base:latest'
       save-docker-image-artifact: 'firedrake-parmmg-base'
 
@@ -57,6 +57,7 @@ jobs:
       # starting from firedrake-parmmg-base, build firedrake-parmmg image
       # which includes Animate, Movement, Goalie, and Thetis packages
       dockerfile-path: 'docker/Dockerfile.firedrake-parmmg'
+      firedrake-branch: 'main'
       docker-image-tag: 'ghcr.io/mesh-adaptation/firedrake-parmmg:latest'
       load-docker-image-artifact: 'firedrake-parmmg-base'
       save-docker-image-artifact: 'firedrake-parmmg'
