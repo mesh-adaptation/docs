@@ -51,7 +51,7 @@ git submodule update
 
 The package can be [installed using pip](https://pip.pypa.io/en/stable/topics/local-project-installs/):
 ```
-python3 -m pip install -e <PACKAGE>
+python3 -m pip install --no-build-isolation -e <PACKAGE>
 ```
 
 ## Updating
