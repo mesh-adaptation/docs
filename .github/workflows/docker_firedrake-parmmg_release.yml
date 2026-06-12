@@ -6,7 +6,7 @@ on:
     paths:
       - '.github/workflows/reusable_docker_build.yml'
       - '.github/workflows/docker_firedrake-parmmg_release.yml'
-      - 'docker/Dockerfile.firedrake-parmmg'
+      - 'docker/Dockerfile.firedrake-parmmg_release'
       - 'docker/Dockerfile.firedrake-um2n'
 
   # Build and push the Docker container when these files get changed on the main branch
@@ -16,7 +16,7 @@ on:
     paths:
       - '.github/workflows/reusable_docker_build.yml'
       - '.github/workflows/docker_firedrake-parmmg_release.yml'
-      - 'docker/Dockerfile.firedrake-parmmg'
+      - 'docker/Dockerfile.firedrake-parmmg_release'
       - 'docker/Dockerfile.firedrake-um2n'
 
   # Run test suite at 1AM on the first of the month
