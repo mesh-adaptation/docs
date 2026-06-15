@@ -49,6 +49,11 @@ git submodule init
 git submodule update
 ```
 
+For Animate only, we require one additional step before installation:
+```
+python3 -m pip install -r animate/build-requirements.txt
+```
+
 The package can be [installed using pip](https://pip.pypa.io/en/stable/topics/local-project-installs/):
 ```
 python3 -m pip install --no-build-isolation -e <PACKAGE>
