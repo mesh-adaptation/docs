@@ -36,19 +36,19 @@ jobs:
       - name: Set up environment
         run: |
           APIURL="https://api.github.com/repos/mesh-adaptation"
-          echo "REPOS=${APIURL}/animate ${APIURL}/goalie ${APIURL}/movement ${APIURL}/UM2N" >> $GITHUB_ENV
-          echo "GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }}" >> $GITHUB_ENV
+          echo "REPOS=${APIURL}/adapt_common ${APIURL}/animate ${APIURL}/goalie ${APIURL}/movement ${APIURL}/UM2N" >> ${GITHUB_ENV}
+          echo "GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }}" >> ${GITHUB_ENV}
 
       - name: Check for updates in repositories
         id: check_repos
         run: |
-          for REPO in $REPOS; do
-            echo "Checking $REPO"
-            COMMITS=$(curl -L -H "Authorization: token $GITHUB_TOKEN" "$REPO/commits?sha=main&since=$(date -d '24 hours ago' +'%Y-%m-%dT%H:%M:%SZ')")
-            echo $COMMITS
+          for REPO in ${REPOS}; do
+            echo "Checking ${REPO}"
+            COMMITS=$(curl -L -H "Authorization: token ${GITHUB_TOKEN}" "$REPO/commits?sha=main&since=$(date -d '24 hours ago' +'%Y-%m-%dT%H:%M:%SZ')")
+            echo ${COMMITS}
             if [ ${#COMMITS} -gt 10 ]; then
-              echo "Found new commits in $REPO"
-              echo "updates_found=true" >> $GITHUB_OUTPUT
+              echo "Found new commits in ${REPO}"
+              echo "updates_found=true" >> ${GITHUB_OUTPUT}
             fi
           done
 
@@ -66,7 +66,7 @@ jobs:
       - name: Export PYTHONPATH
         run: |
           PYTHONVERSION=$(python3 -c "import sys; print('.'.join(sys.version.split('.')[:2]))")
-          echo "PYTHONPATH=/opt/firedrake:/root/animate:/root/goalie:/root/movement:/root/um2n:/root/.local/lib/python${PYTHONVERSION}/site-packages" >> $GITHUB_ENV
+          echo "PYTHONPATH=/opt/firedrake:/root/adapt_common:/root/animate:/root/goalie:/root/movement:/root/um2n:/root/.local/lib/python${PYTHONVERSION}/site-packages" >> ${GITHUB_ENV}
 
       - uses: actions/checkout@v5
         with:
@@ -74,10 +74,15 @@ jobs:
 
       - name: Update Animate, Goalie, Movement, and UM2N
         run: |
-          git config --global --add safe.directory '*'
-          for REPO in animate goalie movement UM2N; do
-            cd /root/${REPO}
+          git config --global --add safe.directory adapt_common
+          git config --global --add safe.directory animate
+          git config --global --add safe.directory goalie
+          git config --global --add safe.directory movement
+          git config --global --add safe.directory UM2N
+          for REPO in adapt_common animate goalie movement UM2N; do
+            cd "/root/${REPO}"
             git pull
+            cd -
           done
         working-directory: /root/output/
         shell: bash
