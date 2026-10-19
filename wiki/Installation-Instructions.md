@@ -21,7 +21,7 @@ python3 ../firedrake-configure --show-petsc-configure-options | xargs -L1 ./conf
 If you have previously installed PETSc without the additional mesh adaptation packages listed above, you can install them using PETSc's [reconfigure](https://petsc.org/release/install/multibuild/#reconfigure) script as follows:
 ```
 cd $PETSC_DIR
-$PETSC_DIR/$PETSC_ARCH/lib/petsc/conf/reconfigure-$PETSC_ARCH.py --download-eigen --download-metis --download-parmetis --download-mmg --download-parmmg
+$PETSC_DIR/$PETSC_ARCH/lib/petsc/conf/reconfigure-$PETSC_ARCH.py --download-eigen --download-metis --download-parmetis --download-mmg --download-mmg-cmake-arguments=-DUSE_SCOTCH=OFF --download-parmmg
 make PETSC_DIR=${PETSC_DIR} PETSC_ARCH=${PETSC_ARCH} all
 ```
 
