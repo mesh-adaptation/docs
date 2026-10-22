@@ -32,10 +32,8 @@ First, ensure that you have activated the Python virtual environment associated 
 source /path/to/venv/bin/activate
 ```
 
-Next, install the `adapt_common` package, which provides common functionality
-for the other Mesh Adaptation packages.
-This and the other Mesh Adaptation packages - Animate, Goalie, and Movement -
-are installed as follows, denoting the package of interest by `<PACKAGE>`.
+Any of the Mesh Adaptation packages - Animate, Goalie, and Movement -
+can be installed as follows, denoting the package of interest by `<PACKAGE>`.
 
 Then clone the `<PACKAGE>` repository using [your preferred method](https://docs.github.com/en/get-started/git-basics/about-remote-repositories). For example, cloning with HTTPS URL is done as follows:
 ```
@@ -51,7 +49,7 @@ git submodule update
 
 For Animate only, we require one additional step before installation:
 ```
-python3 -m pip install -r animate/build-requirements.txt
+python3 -m pip install -r ./requirements-build.txt
 ```
 
 The package can be [installed using pip](https://pip.pypa.io/en/stable/topics/local-project-installs/):
