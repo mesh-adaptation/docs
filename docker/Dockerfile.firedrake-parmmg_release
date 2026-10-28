@@ -13,6 +13,10 @@ RUN mkdir -p /github/home/.cache/pip && chmod -R 777 /github/home/.cache/pip
 # Install Thetis
 RUN pip install --verbose --src . -e git+https://github.com/thetisproject/thetis.git#egg=thetis
 
+# Workaround: installing some of the dependencies below, pip tries to upgrade the
+# `packaging` package, which is system installed and therefore fails to upgrade
+RUN pip install --ignore-installed packaging
+
 # Install adapt_common, Animate, Movement, Goalie and their dependencies
 RUN git clone https://github.com/mesh-adaptation/adapt_common.git && \
     git clone https://github.com/mesh-adaptation/animate.git && \

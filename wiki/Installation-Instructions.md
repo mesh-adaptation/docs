@@ -13,7 +13,7 @@ As described on the [Firedrake installation page](https://www.firedrakeproject.o
 
 To use the mesh adaptation modules, we can install system dependencies (step 1) and Firedrake (step 3) exactly as described, but we must [customise the PETSc installation](https://www.firedrakeproject.org/install.html#id29) (step 2) to install additional packages: METIS, ParMETIS, MMG, and ParMMG. We do that simply by passing the `--download-<PACKAGE>` flags when running PETSc `configure`:
 ```
-python3 ../firedrake-configure --show-petsc-configure-options | xargs -L1 ./configure --download-metis --download-parmetis --download-mmg --download-parmmg
+python3 ../firedrake-configure --show-petsc-configure-options | xargs -L1 ./configure --download-metis --download-parmetis --download-mmg --download-mmg-cmake-arguments=-DUSE_SCOTCH=OFF --download-parmmg
 ```
 
 ### Reconfiguring an existing installation
@@ -21,7 +21,7 @@ python3 ../firedrake-configure --show-petsc-configure-options | xargs -L1 ./conf
 If you have previously installed PETSc without the additional mesh adaptation packages listed above, you can install them using PETSc's [reconfigure](https://petsc.org/release/install/multibuild/#reconfigure) script as follows:
 ```
 cd $PETSC_DIR
-$PETSC_DIR/$PETSC_ARCH/lib/petsc/conf/reconfigure-$PETSC_ARCH.py --download-metis --download-parmetis --download-mmg --download-parmmg
+$PETSC_DIR/$PETSC_ARCH/lib/petsc/conf/reconfigure-$PETSC_ARCH.py --download-metis --download-parmetis --download-mmg --download-mmg-cmake-arguments=-DUSE_SCOTCH=OFF --download-parmmg
 make PETSC_DIR=${PETSC_DIR} PETSC_ARCH=${PETSC_ARCH} all
 ```
 
@@ -32,10 +32,8 @@ First, ensure that you have activated the Python virtual environment associated 
 source /path/to/venv/bin/activate
 ```
 
-Next, install the `adapt_common` package, which provides common functionality
-for the other Mesh Adaptation packages.
-This and the other Mesh Adaptation packages - Animate, Goalie, and Movement -
-are installed as follows, denoting the package of interest by `<PACKAGE>`.
+Any of the Mesh Adaptation packages - Animate, Goalie, and Movement -
+can be installed as follows, denoting the package of interest by `<PACKAGE>`.
 
 Then clone the `<PACKAGE>` repository using [your preferred method](https://docs.github.com/en/get-started/git-basics/about-remote-repositories). For example, cloning with HTTPS URL is done as follows:
 ```
@@ -51,7 +49,7 @@ git submodule update
 
 For Animate only, we require one additional step before installation:
 ```
-python3 -m pip install -r animate/build-requirements.txt
+python3 -m pip install -r ./requirements-build.txt
 ```
 
 The package can be [installed using pip](https://pip.pypa.io/en/stable/topics/local-project-installs/):
