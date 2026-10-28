@@ -102,7 +102,7 @@ jobs:
           build-args: |
             ARCH=default
             BRANCH=${{ inputs.firedrake-branch }}
-            PETSC_EXTRA_ARGS=--download-eigen --download-metis --download-parmetis --download-mmg --download-mmg-cmake-arguments=-DUSE_SCOTCH=OFF --download-parmmg
+            PETSC_EXTRA_ARGS=--download-metis --download-parmetis --download-mmg --download-mmg-cmake-arguments=-DUSE_SCOTCH=OFF --download-parmmg
 
       - name: Save Docker image
         if: ${{ inputs.save-docker-image-artifact != null }}
