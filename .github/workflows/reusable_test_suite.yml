@@ -8,6 +8,11 @@ on:
         required: false
         default: 'firedrake-parmmg:latest'
         type: string
+      ref:
+        description: 'Git ref to check out (empty means the ref that triggered the workflow)'
+        required: false
+        default: ''
+        type: string
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
@@ -34,6 +39,7 @@ jobs:
         uses: actions/checkout@v5
         with:
           persist-credentials: false
+          ref: ${{ inputs.ref }}
 
       - name: Configure submodules and install the package
         run: |
