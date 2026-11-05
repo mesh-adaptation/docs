@@ -51,8 +51,9 @@ jobs:
           git submodule init
           git submodule update
           pip uninstall ${REPO_NAME} -y || true
-          if test -f ${REPO_NAME}/requirements-build.txt; then pip install -r ${REPO_NAME}/requirements-build.txt; fi
+          if test -f requirements-build.txt; then pip install -r ./requirements-build.txt; fi
           pip install --no-build-isolation -e .[dev]
+          if test -d adapt_common/; then pip uninstall adapt_common -y || true; pip install -e adapt_common/; fi
 
       - run: make lint
 
